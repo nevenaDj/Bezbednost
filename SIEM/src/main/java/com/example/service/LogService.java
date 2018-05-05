@@ -23,7 +23,11 @@ public class LogService {
 	private Log parseLine(String line) {
 		String[] splited = line.split("\\s+");
 		String[] splited2 = splited[0].split(">");
-		int prival = Integer.parseInt(splited2[0].substring(1, splited2[0].length()));
+		int prival = 100;
+		if (!splited2[0].substring(1, splited2[0].length()).equals("-")){
+			prival = Integer.parseInt(splited2[0].substring(1, splited2[0].length()));
+		}
+		
 		int version = Integer.parseInt(splited2[1]);
 		String sd = splited[6];
 		String msg = splited[7];
