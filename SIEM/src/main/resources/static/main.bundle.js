@@ -234,7 +234,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".pass {\r\n    width: 50%;\r\n    margin: auto;\r\n}\r\n\r\n.save-button-text {\r\n    color: #626f4c;\r\n    opacity: 0.7;\r\n    padding: 10px;\r\n    width: 100%;\r\n    margin-top: 5px;\r\n}\r\n\r\n.save-button-text:hover{\r\n     -webkit-text-decoration-color: #a2aab0;\r\n             text-decoration-color: #a2aab0;\r\n     opacity: 0.2;\r\n}\r\n\r\n.full-button-text {\r\n    color: #4c586f;\r\n    opacity: 0.7;\r\n    padding: 10px;\r\n    width: 100%;\r\n    margin-top: 5px;\r\n}\r\n\r\n.full-button-text:hover{\r\n     -webkit-text-decoration-color: #a2aab0;\r\n             text-decoration-color: #a2aab0;\r\n     opacity: 0.2;\r\n}", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 
@@ -258,9 +258,10 @@ module.exports = "<div class=\"container\">\n    <h1>Change password</h1>\n    <
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChangePasswordComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -274,10 +275,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ChangePasswordComponent = /** @class */ (function () {
-    function ChangePasswordComponent(auth, location, toastr, vcr) {
+    function ChangePasswordComponent(auth, location, router, toastr, vcr) {
         this.auth = auth;
         this.location = location;
+        this.router = router;
         this.toastr = toastr;
         this.vcr = vcr;
         this.toastr.setRootViewContainerRef(vcr);
@@ -288,6 +291,9 @@ var ChangePasswordComponent = /** @class */ (function () {
         };
     }
     ChangePasswordComponent.prototype.ngOnInit = function () {
+        if (localStorage.getItem('token') == null) {
+            this.router.navigate(['login']);
+        }
     };
     ChangePasswordComponent.prototype.save = function (model, isValid) {
         var _this = this;
@@ -308,9 +314,10 @@ var ChangePasswordComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/change-password/change-password.component.html"),
             styles: [__webpack_require__("../../../../../src/app/change-password/change-password.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__login_auth_service__["a" /* AuthService */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__login_auth_service__["a" /* AuthService */],
             __WEBPACK_IMPORTED_MODULE_1__angular_common__["Location"],
-            __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__["ToastsManager"],
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"],
             __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"]])
     ], ChangePasswordComponent);
     return ChangePasswordComponent;
@@ -618,6 +625,7 @@ var LoginComponent = /** @class */ (function () {
     };
     LoginComponent.prototype.login = function () {
         var _this = this;
+        localStorage.removeItem('token');
         this.auth.login(this.user.username, this.user.password)
             .then(function (res) { return _this.router.navigate(['/home']); })
             .catch(function (res) { return _this.toastr.error('Invalid username/password.'); });

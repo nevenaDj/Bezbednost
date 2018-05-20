@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 import { AuthService } from '../login/auth.service';
@@ -15,6 +16,7 @@ export class ChangePasswordComponent implements OnInit {
 
   constructor(private auth: AuthService,
               private location: Location,
+              private router: Router,
               private toastr: ToastsManager, 
               private vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
@@ -26,6 +28,9 @@ export class ChangePasswordComponent implements OnInit {
    }
 
   ngOnInit() {
+    if (localStorage.getItem('token') == null){
+      this.router.navigate(['login']);
+    }
   }
 
   save(model: UserPassInterface, isValid: boolean){
