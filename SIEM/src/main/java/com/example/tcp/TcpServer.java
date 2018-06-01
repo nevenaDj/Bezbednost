@@ -1,20 +1,33 @@
 package com.example.tcp;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class TcpServer implements Server, Connection.Listener {
 	private static Log logger = LogFactory.getLog(TcpServer.class);
 
-	private ServerSocket serverSocket;
+	private SSLServerSocket serverSocket;
 	private volatile boolean isStop;
 	private List<Connection> connections = new ArrayList<>();
 	private List<Connection.Listener> listeners = new ArrayList<>();
@@ -25,9 +38,26 @@ public class TcpServer implements Server, Connection.Listener {
 				logger.info("Property tcp.server.port not found. Use default port 1234");
 				port = 1234;
 			}
-			serverSocket = new ServerSocket(port);
+			KeyStore keyStore = KeyStore.getInstance("JKS");
+			keyStore.load(new FileInputStream("src\\main\\resources\\siem-center.p12"), "secretpassword".toCharArray());
+
+			KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+			keyManagerFactory.init(keyStore, "secretpassword".toCharArray());
+
+			TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
+			trustManagerFactory.init(keyStore);
+
+			SSLContext context = SSLContext.getInstance("TLSv1.2");
+			TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+			context.init(keyManagerFactory.getKeyManagers(), trustManagers, null);
+
+			SSLServerSocketFactory serverSocketFactory = context.getServerSocketFactory();
+			serverSocket = (SSLServerSocket) serverSocketFactory.createServerSocket(port);
+			serverSocket.setEnabledCipherSuites(serverSocket.getSupportedCipherSuites());
+
 			logger.info("Server start at port " + port);
-		} catch (IOException e) {
+		} catch (IOException | NoSuchAlgorithmException | KeyManagementException | KeyStoreException
+				| CertificateException | UnrecoverableKeyException e) {
 			e.printStackTrace();
 			logger.error("May be port " + port + " busy.");
 		}
@@ -43,7 +73,8 @@ public class TcpServer implements Server, Connection.Listener {
 		new Thread(() -> {
 			while (!isStop) {
 				try {
-					Socket socket = serverSocket.accept();
+					SSLSocket socket = (SSLSocket) serverSocket.accept();
+					// Socket socket = serverSocket.accept();
 					if (socket.isConnected()) {
 						TcpConnection tcpConnection = new TcpConnection(socket);
 						tcpConnection.start();

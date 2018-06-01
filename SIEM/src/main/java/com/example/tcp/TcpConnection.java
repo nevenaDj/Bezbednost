@@ -4,18 +4,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.net.ssl.SSLSocket;
+
 public class TcpConnection implements Connection {
 	private InputStream inputStream;
 	private OutputStream outputStream;
-	private Socket socket;
+	private SSLSocket socket;
 	private List<Listener> listeners = new ArrayList<>();
 
-	public TcpConnection(Socket socket) {
+	public TcpConnection(SSLSocket socket) {
 		this.socket = socket;
 		try {
 			inputStream = socket.getInputStream();
