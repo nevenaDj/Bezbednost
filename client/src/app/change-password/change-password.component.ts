@@ -47,4 +47,8 @@ export class ChangePasswordComponent implements OnInit {
     this.location.back();
   }
 
+  logout(){
+    this.auth.logout();
+  }
+
 }
