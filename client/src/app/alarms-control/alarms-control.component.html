@@ -1,0 +1,50 @@
+<div style="text-align:center" class="logo">
+  <br>
+<h1 class="logo">
+  Bezbednost
+</h1>
+<ul>
+    <li><a href="/#/logs" class="menu">Logs</a></li>
+    <li><a href="/#/alarms" class="menu">Alarms</a></li>
+    <li><a href="/#/alarms/control" class="menu">Alarms Control</a></li>
+    <li><a href="/#/password" class="menu">Change password</a></li>
+    <li><a (click)="logout()" class="menu">Log out</a></li>
+
+    
+  </ul>
+
+
+</div>
+<br>
+<div class="container">    
+  <button class="btn btn-default" (click)="newAlarm()">New</button>  
+  <br>      
+  <br>                                                            
+<div class="table-responsive">          
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Seconds</th>
+      <th>Number</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody  *ngFor="let alarm of alarms; let i = index">
+    <tr>
+      <td>{{i + 1}}</td>
+      <td>{{alarm.name}}</td>
+      <td>{{alarm.description}}</td>
+      <td>{{alarm.seconds}}</td>
+      <td>{{alarm.number}}</td>
+      <td *ngIf="alarm.canDelete" (click)="deleteAlarm(alarm.id)">Delete</td>
+      <td *ngIf="!alarm.canDelete">:)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+

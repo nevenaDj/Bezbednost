@@ -17,6 +17,420 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_lazy_route_resource lazy re
 
 /***/ }),
 
+/***/ "../../../../../src/app/alarm-details/alarm-details.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/alarm-details/alarm-details.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div style=\"text-align:center\" class=\"logo\">\n  <br>\n<h1 class=\"logo\">\n  Bezbednost\n</h1>\n<ul>\n    <li><a href=\"/#/logs\" class=\"menu\">Logs</a></li>\n    <li><a href=\"/#/alarms\" class=\"menu\">Alarms</a></li>\n    <li><a href=\"/#/alarms/control\" class=\"menu\">Alarms Control</a></li>\n    <li><a href=\"/#/password\" class=\"menu\">Change password</a></li>\n    <li><a (click)=\"logout()\" class=\"menu\">Log out</a></li>\n\n    \n  </ul>\n\n\n</div>\n<br>\n<div class=\"container\">\n  <h2>Alarm {{alarm.id}}</h2>\n  <form class=\"form-horizontal\">\n    <div class=\"form-group\">\n      <label class=\"col-sm-12\" for=\"name\"><b>Name: </b>{{alarm.name}} </label>\n      \n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"desc\"><b>Description:</b></label>\n      <div  class=\"control-label col-sm-10\">{{alarm.description}}</div>  \n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-4\" for=\"vers\"><b>Number:</b> {{alarm.number}}</label>\n      <label class=\"control-label col-sm-4\" for=\"prival\"><b>Seconds:</b> {{alarm.seconds}}</label>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-4\" for=\"vers\"><b>Version:</b> {{alarm.version}}</label>\n      <label class=\"control-label col-sm-4\" for=\"prival\"><b>Prival: </b>{{alarm.prival}}</label>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"timestamp\"><b>Timestamp:</b> {{alarm.timestamp}} </label>\n      <div class=\"col-sm-10\">          \n        <p></p>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-4\" for=\"hostname\"><b>Hostname: </b>{{alarm.hostname}}</label>\n      <label class=\"control-label col-sm-4\" for=\"appname\"><b>Appname:</b> {{alarm.appname}}</label>\n     \n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-4\" for=\"procid\"><b>Procid:</b> {{alarm.procid}}</label>\n      <label class=\"control-label col-sm-2\" for=\"msgid\"><b>Msgid:</b> {{alarm.msgid}}</label>\n    </div>\n\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"sd\"><b>Stuctured data:</b></label>\n      <div class=\"col-sm-10\">          \n        <p>{{alarm.sd}} </p>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"msg\"><b>Mesasge:</b></label>\n      <div class=\"col-sm-10\">          \n        <p>{{alarm.msf}} </p>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"msg\"><b>Logs:</b></label>\n      <div class=\"col-sm-10\">          \n        <div class=\"container\"> \n                                                               \n          <div class=\"table-responsive\">          \n          <table class=\"table table-striped\" >\n            <thead>\n              <tr>\n                <th>#</th>\n                <th>Priority value</th>\n                <th>Version</th>\n                <th>Timestamp</th>\n                <th>Hostname</th>\n                <th>Appname</th>\n                <th>Procid</th>\n                <th>Message id</th>\n                <th>Structured data</th>\n                <th>Message</th>\n              </tr>\n            </thead>\n            <tbody  *ngFor=\"let log of alarm.logs; let i = index\">\n              <tr>\n                <td>{{i + 1}}</td>\n                <td>{{log.prival}}</td>\n                <td>{{log.version}}</td>\n                <td>{{log.timestamp}}</td>\n                <td>{{log.hostname}}</td>\n                <td>{{log.appname}}</td>\n                <td>{{log.procid}}</td>\n                <td>{{log.msgid}}</td>\n                <td>{{log.sd}}</td>\n                <td>{{log.msg}}</td>\n              </tr>\n            </tbody>\n          </table>\n          </div>\n        </div>\n      \n      \n      \n      </div>\n    </div>\n    <button class=\"btn btn-default\"  (click)=\"back()\">Back</button>\n  </form>\n</div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/alarm-details/alarm-details.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AlarmDetailsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__alarms_alarms_service__ = __webpack_require__("../../../../../src/app/alarms/alarms.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var AlarmDetailsComponent = /** @class */ (function () {
+    function AlarmDetailsComponent(alarmService, auth, route, router) {
+        this.alarmService = alarmService;
+        this.auth = auth;
+        this.route = route;
+        this.router = router;
+        this.alarm = {
+            appname: '',
+            description: '',
+            hostname: '',
+            id: 0,
+            logs: [],
+            msg: '',
+            msgid: '',
+            name: '',
+            prival: 0,
+            procid: '',
+            sd: '',
+            timestamp: '',
+            version: 0,
+            number: 0,
+            seconds: 0,
+            canDelete: true
+        };
+    }
+    AlarmDetailsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.alarmService.getAlarm(+this.route.snapshot.params['id']).then(function (res) { return _this.alarm = res; }).catch(function (err) { return _this.router.navigate(['alarms']); });
+    };
+    AlarmDetailsComponent.prototype.logout = function () {
+        this.auth.logout();
+    };
+    AlarmDetailsComponent.prototype.back = function () {
+        this.router.navigate(['alarms']);
+    };
+    AlarmDetailsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-alarm-details',
+            template: __webpack_require__("../../../../../src/app/alarm-details/alarm-details.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/alarm-details/alarm-details.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__alarms_alarms_service__["a" /* AlarmsService */], __WEBPACK_IMPORTED_MODULE_3__login_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]])
+    ], AlarmDetailsComponent);
+    return AlarmDetailsComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/alarms-control/alarms-control.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/alarms-control/alarms-control.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div style=\"text-align:center\" class=\"logo\">\n  <br>\n<h1 class=\"logo\">\n  Bezbednost\n</h1>\n<ul>\n    <li><a href=\"/#/logs\" class=\"menu\">Logs</a></li>\n    <li><a href=\"/#/alarms\" class=\"menu\">Alarms</a></li>\n    <li><a href=\"/#/alarms/control\" class=\"menu\">Alarms Control</a></li>\n    <li><a href=\"/#/password\" class=\"menu\">Change password</a></li>\n    <li><a (click)=\"logout()\" class=\"menu\">Log out</a></li>\n\n    \n  </ul>\n\n\n</div>\n<br>\n<div class=\"container\">    \n  <button class=\"btn btn-default\" (click)=\"newAlarm()\">New</button>  \n  <br>      \n  <br>                                                            \n<div class=\"table-responsive\">          \n<table class=\"table table-striped\">\n  <thead>\n    <tr>\n      <th>#</th>\n      <th>Name</th>\n      <th>Description</th>\n      <th>Seconds</th>\n      <th>Number</th>\n      <th>Delete</th>\n    </tr>\n  </thead>\n  <tbody  *ngFor=\"let alarm of alarms; let i = index\">\n    <tr>\n      <td>{{i + 1}}</td>\n      <td>{{alarm.name}}</td>\n      <td>{{alarm.description}}</td>\n      <td>{{alarm.seconds}}</td>\n      <td>{{alarm.number}}</td>\n      <td *ngIf=\"alarm.canDelete\" (click)=\"deleteAlarm(alarm.id)\">Delete</td>\n      <td *ngIf=\"!alarm.canDelete\">:)</td>\n    </tr>\n  </tbody>\n</table>\n</div>\n</div>\n\n\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/alarms-control/alarms-control.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AlarmsControlComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__alarms_alarms_service__ = __webpack_require__("../../../../../src/app/alarms/alarms.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var AlarmsControlComponent = /** @class */ (function () {
+    function AlarmsControlComponent(router, auth, alarmService) {
+        this.router = router;
+        this.auth = auth;
+        this.alarmService = alarmService;
+        this.alarms = [];
+    }
+    AlarmsControlComponent.prototype.ngOnInit = function () {
+        this.getAlarms();
+    };
+    AlarmsControlComponent.prototype.logout = function () {
+        this.auth.logout();
+    };
+    AlarmsControlComponent.prototype.getAlarms = function () {
+        var _this = this;
+        this.alarmService.getAlarms().then(function (res) {
+            _this.alarms = res;
+            console.log(res);
+        });
+    };
+    AlarmsControlComponent.prototype.showAlarm = function (id) {
+        console.log(id);
+        var path = '/#/alarms/' + id;
+    };
+    AlarmsControlComponent.prototype.deleteAlarm = function (id) {
+        var _this = this;
+        this.alarmService.deleteAlarm(id).then(function (res) {
+            console.log('good');
+            _this.alarms = [];
+            _this.getAlarms();
+        }).catch(function (res) {
+            console.log('bad');
+            _this.alarms = [];
+            _this.getAlarms();
+            //window.location.reload()
+        });
+    };
+    AlarmsControlComponent.prototype.newAlarm = function () {
+        this.router.navigate(['/alarms/new']);
+    };
+    AlarmsControlComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-alarms-control',
+            template: __webpack_require__("../../../../../src/app/alarms-control/alarms-control.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/alarms-control/alarms-control.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_3__login_auth_service__["a" /* AuthService */],
+            __WEBPACK_IMPORTED_MODULE_2__alarms_alarms_service__["a" /* AlarmsService */]])
+    ], AlarmsControlComponent);
+    return AlarmsControlComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/alarms/alarms.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/alarms/alarms.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div style=\"text-align:center\" class=\"logo\">\n  <br>\n<h1 class=\"logo\">\n  Bezbednost\n</h1>\n<ul>\n    <li><a href=\"/#/logs\" class=\"menu\">Logs</a></li>\n    <li><a href=\"/#/alarms\" class=\"menu\">Alarms</a></li>\n    <li><a href=\"/#/alarms/control\" class=\"menu\">Alarms Control</a></li>\n    <li><a href=\"/#/password\" class=\"menu\">Change password</a></li>\n    <li><a (click)=\"logout()\" class=\"menu\">Log out</a></li>\n\n    \n  </ul>\n\n\n</div>\n<br>\n<div class=\"container\">  \n\n  <button (click)=\"showHide()\" class=\"btn btn-default\" > Setting</button>\n  <div *ngIf=\"show\" class=\"col-sm-4\" >\n      <table class=\"table table-striped\" >\n          <tbody  *ngFor=\"let item of alarmList.items\" >\n              <tr>\n                <td>{{item.alarm.name}}</td>\n                <td *ngIf=\"item.show\" (click)=\"remove(item.alarm)\"><input type=\"checkbox\" name=\"item\" checked></td>\n                <td *ngIf=\"!item.show\" (click)=\"add(item.alarm)\"><input type=\"checkbox\" name=\"item\"></td>\n              </tr>\n              </tbody>\n        </table>\n  </div>\n  <br>\n  <br>\n  <div class=\"table-responsive\">          \n  <table class=\"table table-striped\" >\n    <thead>\n      <tr>\n        <th>Priority value</th>\n        <th>Version</th>\n        <th>Timestamp</th>\n        <th>Hostname</th>\n        <th>Appname</th>\n        <th>Procid</th>\n        <th>Message id</th>\n        <th>Structured data</th>\n        <th>Message</th>\n        <th>Alarm</th>\n      </tr>\n    </thead>\n    <tbody  *ngFor=\"let alarm of alarms\" >\n      <tr *ngFor=\"let log of alarm.logs\" (click)=\"showAlarm(alarm.id)\">\n        <td>{{log.prival}}</td>\n        <td>{{log.version}}</td>\n        <td>{{log.timestamp}}</td>\n        <td>{{log.hostname}}</td>\n        <td>{{log.appname}}</td>\n        <td>{{log.procid}}</td>\n        <td>{{log.msgid}}</td>\n        <td>{{log.sd}}</td>\n        <td>{{log.msg}}</td>\n        <td>{{alarm.name}}</td>\n      </tr>\n    </tbody>\n  </table>\n  </div>\n</div>\n\n\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/alarms/alarms.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AlarmsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__alarms_service__ = __webpack_require__("../../../../../src/app/alarms/alarms.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var AlarmsComponent = /** @class */ (function () {
+    function AlarmsComponent(router, auth, alarmService) {
+        this.router = router;
+        this.auth = auth;
+        this.alarmService = alarmService;
+        this.show = false;
+        this.alarms = [];
+        this.allAlarms = [];
+        this.alarmList = { items: [] };
+    }
+    AlarmsComponent.prototype.ngOnInit = function () {
+        this.getAlarms();
+    };
+    AlarmsComponent.prototype.logout = function () {
+        this.auth.logout();
+    };
+    AlarmsComponent.prototype.getAlarms = function () {
+        var _this = this;
+        this.alarmService.getAlarms().then(function (res) {
+            _this.alarms = res;
+            for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
+                var a = res_1[_i];
+                _this.allAlarms.push(a);
+            }
+            for (var _a = 0, _b = _this.alarms; _a < _b.length; _a++) {
+                var alar = _b[_a];
+                var item = { alarm: alar, show: true };
+                _this.alarmList.items.push(item);
+            }
+            console.log(_this.alarmList.items);
+        });
+    };
+    AlarmsComponent.prototype.showAlarm = function (id) {
+        console.log(id);
+        var path = '/#/alarms/' + id;
+        this.router.navigate(['/alarms', id]);
+    };
+    AlarmsComponent.prototype.showHide = function () {
+        if (this.show)
+            this.show = false;
+        else
+            this.show = true;
+    };
+    AlarmsComponent.prototype.remove = function (alarm) {
+        console.log('remove');
+        for (var a = 0; a < this.alarms.length; a++) {
+            if (this.alarms[a].id == alarm.id)
+                this.alarms.splice(a, 1);
+        }
+        for (var _i = 0, _a = this.alarmList.items; _i < _a.length; _i++) {
+            var a_1 = _a[_i];
+            if (a_1.alarm.id == alarm.id)
+                a_1.show = false;
+        }
+    };
+    AlarmsComponent.prototype.add = function (alarm) {
+        console.log('add');
+        for (var _i = 0, _a = this.alarmList.items; _i < _a.length; _i++) {
+            var a = _a[_i];
+            if (a.alarm.id == alarm.id)
+                a.show = true;
+        }
+        console.log('alarm: ', alarm.id);
+        for (var a in this.allAlarms) {
+            console.log(this.allAlarms[a].id);
+            if (this.allAlarms[a].id == alarm.id) {
+                console.log('before:', this.alarms);
+                this.alarms.push(this.allAlarms[a]);
+                console.log('after:', this.alarms);
+            }
+        }
+    };
+    AlarmsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-alarms',
+            template: __webpack_require__("../../../../../src/app/alarms/alarms.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/alarms/alarms.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_3__login_auth_service__["a" /* AuthService */],
+            __WEBPACK_IMPORTED_MODULE_2__alarms_service__["a" /* AlarmsService */]])
+    ], AlarmsComponent);
+    return AlarmsComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/alarms/alarms.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AlarmsService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var AlarmsService = /** @class */ (function () {
+    function AlarmsService(http) {
+        this.http = http;
+        this.url = '/api/alarms';
+        this.headers = new __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["d" /* HttpHeaders */]({ 'Content-Type': 'application/json' });
+        this.RegenerateData = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["Subject"]();
+        this.RegenerateData$ = this.RegenerateData.asObservable();
+    }
+    AlarmsService.prototype.announceChange = function () {
+        this.RegenerateData.next();
+    };
+    AlarmsService.prototype.getAlarms = function () {
+        return this.http
+            .get(this.url, { 'headers': this.headers })
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    AlarmsService.prototype.getAlarm = function (id) {
+        var url = this.url + '/' + id;
+        return this.http
+            .get(url, { 'headers': this.headers })
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    AlarmsService.prototype.deleteAlarm = function (id) {
+        var url = this.url + '/' + id;
+        return this.http
+            .delete(url, { 'headers': this.headers })
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    AlarmsService.prototype.createAlarm = function (alarm) {
+        var url = this.url;
+        return this.http
+            .post(url, alarm, { 'headers': this.headers })
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    AlarmsService.prototype.handleError = function (error) {
+        console.error("Error... ", error);
+        return Promise.reject(error.message || error);
+    };
+    AlarmsService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_common_http__["b" /* HttpClient */]])
+    ], AlarmsService);
+    return AlarmsService;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/app-routing.module.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -27,6 +441,11 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_lazy_route_resource lazy re
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_login_component__ = __webpack_require__("../../../../../src/app/login/login.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__change_password_change_password_component__ = __webpack_require__("../../../../../src/app/change-password/change-password.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__logs_logs_component__ = __webpack_require__("../../../../../src/app/logs/logs.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__alarms_alarms_component__ = __webpack_require__("../../../../../src/app/alarms/alarms.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__alarms_control_alarms_control_component__ = __webpack_require__("../../../../../src/app/alarms-control/alarms-control.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__new_alarm_new_alarm_component__ = __webpack_require__("../../../../../src/app/new-alarm/new-alarm.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__alarm_details_alarm_details_component__ = __webpack_require__("../../../../../src/app/alarm-details/alarm-details.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -38,7 +457,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
+
+
+
+
 var routes = [
+    {
+        path: 'logs', component: __WEBPACK_IMPORTED_MODULE_5__logs_logs_component__["a" /* LogsComponent */]
+    },
+    {
+        path: 'alarms', component: __WEBPACK_IMPORTED_MODULE_6__alarms_alarms_component__["a" /* AlarmsComponent */]
+    },
+    {
+        path: 'alarms/control', component: __WEBPACK_IMPORTED_MODULE_7__alarms_control_alarms_control_component__["a" /* AlarmsControlComponent */]
+    },
+    {
+        path: 'alarms/new', component: __WEBPACK_IMPORTED_MODULE_8__new_alarm_new_alarm_component__["a" /* NewAlarmComponent */]
+    },
+    {
+        path: 'alarms/:id', component: __WEBPACK_IMPORTED_MODULE_9__alarm_details_alarm_details_component__["a" /* AlarmDetailsComponent */]
+    },
     {
         path: 'home',
         component: __WEBPACK_IMPORTED_MODULE_2__home_home_component__["a" /* HomeComponent */]
@@ -58,8 +497,8 @@ var AppRoutingModule = /** @class */ (function () {
     }
     AppRoutingModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
-            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* RouterModule */].forRoot(routes, { useHash: true })],
-            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* RouterModule */]]
+            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */].forRoot(routes, { useHash: true })],
+            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */]]
         })
     ], AppRoutingModule);
     return AppRoutingModule;
@@ -139,13 +578,21 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_ng2_toastr_ng2_toastr__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__login_login_component__ = __webpack_require__("../../../../../src/app/login/login.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__token_interceptor_service__ = __webpack_require__("../../../../../src/app/token-interceptor.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__change_password_change_password_component__ = __webpack_require__("../../../../../src/app/change-password/change-password.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__change_password_equal_validator_directive__ = __webpack_require__("../../../../../src/app/change-password/equal-validator.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ngx_infinite_scroll__ = __webpack_require__("../../../../ngx-infinite-scroll/modules/ngx-infinite-scroll.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__login_login_component__ = __webpack_require__("../../../../../src/app/login/login.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__logs_logs_service__ = __webpack_require__("../../../../../src/app/logs/logs.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__alarms_alarms_service__ = __webpack_require__("../../../../../src/app/alarms/alarms.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__token_interceptor_service__ = __webpack_require__("../../../../../src/app/token-interceptor.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__change_password_change_password_component__ = __webpack_require__("../../../../../src/app/change-password/change-password.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__change_password_equal_validator_directive__ = __webpack_require__("../../../../../src/app/change-password/equal-validator.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__alarms_alarms_component__ = __webpack_require__("../../../../../src/app/alarms/alarms.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__alarm_details_alarm_details_component__ = __webpack_require__("../../../../../src/app/alarm-details/alarm-details.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__alarms_control_alarms_control_component__ = __webpack_require__("../../../../../src/app/alarms-control/alarms-control.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__logs_logs_component__ = __webpack_require__("../../../../../src/app/logs/logs.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__new_alarm_new_alarm_component__ = __webpack_require__("../../../../../src/app/new-alarm/new-alarm.component.ts");
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -162,6 +609,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
+
+
+
+
 
 
 
@@ -194,11 +649,16 @@ var AppModule = /** @class */ (function () {
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_8__home_home_component__["a" /* HomeComponent */],
-                __WEBPACK_IMPORTED_MODULE_9__login_login_component__["a" /* LoginComponent */],
-                __WEBPACK_IMPORTED_MODULE_12__change_password_change_password_component__["a" /* ChangePasswordComponent */],
-                __WEBPACK_IMPORTED_MODULE_13__change_password_equal_validator_directive__["a" /* EqualValidator */]
+                __WEBPACK_IMPORTED_MODULE_8__app_component__["a" /* AppComponent */],
+                __WEBPACK_IMPORTED_MODULE_9__home_home_component__["a" /* HomeComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__login_login_component__["a" /* LoginComponent */],
+                __WEBPACK_IMPORTED_MODULE_15__change_password_change_password_component__["a" /* ChangePasswordComponent */],
+                __WEBPACK_IMPORTED_MODULE_16__change_password_equal_validator_directive__["a" /* EqualValidator */],
+                __WEBPACK_IMPORTED_MODULE_17__alarms_alarms_component__["a" /* AlarmsComponent */],
+                __WEBPACK_IMPORTED_MODULE_18__alarm_details_alarm_details_component__["a" /* AlarmDetailsComponent */],
+                __WEBPACK_IMPORTED_MODULE_19__alarms_control_alarms_control_component__["a" /* AlarmsControlComponent */],
+                __WEBPACK_IMPORTED_MODULE_20__logs_logs_component__["a" /* LogsComponent */],
+                __WEBPACK_IMPORTED_MODULE_21__new_alarm_new_alarm_component__["a" /* NewAlarmComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["BrowserModule"],
@@ -206,17 +666,20 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_0__app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* FormsModule */],
                 __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["c" /* HttpClientModule */],
+                __WEBPACK_IMPORTED_MODULE_7_ngx_infinite_scroll__["a" /* InfiniteScrollModule */],
                 __WEBPACK_IMPORTED_MODULE_6_ng2_toastr_ng2_toastr__["ToastModule"].forRoot(),
             ],
             providers: [
-                __WEBPACK_IMPORTED_MODULE_10__login_auth_service__["a" /* AuthService */],
+                __WEBPACK_IMPORTED_MODULE_13__login_auth_service__["a" /* AuthService */],
+                __WEBPACK_IMPORTED_MODULE_12__alarms_alarms_service__["a" /* AlarmsService */],
+                __WEBPACK_IMPORTED_MODULE_11__logs_logs_service__["a" /* LogsService */],
                 {
                     provide: __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["a" /* HTTP_INTERCEPTORS */],
-                    useClass: __WEBPACK_IMPORTED_MODULE_11__token_interceptor_service__["a" /* TokenInterceptorService */],
+                    useClass: __WEBPACK_IMPORTED_MODULE_14__token_interceptor_service__["a" /* TokenInterceptorService */],
                     multi: true
                 }
             ],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */]]
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_8__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
     return AppModule;
@@ -247,7 +710,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/change-password/change-password.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n    <h1>Change password</h1>\n    <form #f=\"ngForm\" novalidate (ngSubmit)=\"save(f.value, f.valid)\">\n        <div class=\"form-group\">\n            <label for=\"\">Current password</label>\n            <input type=\"password\" class=\"form-control\" name=\"username\" [(ngModel)]=\"user.currentPassword\" \n              required #username=\"ngModel\">\n            <small [hidden]=\"username.valid || (username.pristine && !f.submitted)\" class=\"text-danger\">\n              Password is required.\n            </small>\n            <!--<pre *ngIf=\"username.errors\" class=\"margin-20\">{{ username.errors | json }}</pre>-->\n          </div>\n      <div class=\"form-group\">\n        <label for=\"\">Password</label>\n        <input type=\"password\" class=\"form-control\" name=\"password\" [(ngModel)]=\"user.newPassword\" \n          required validateEqual=\"confirmPassword\" reverse=\"true\" #password=\"ngModel\" minlength=\"6\">\n        <small [hidden]=\"password.valid || (password.pristine && !f.submitted)\" class=\"text-danger\">\n          Password is required (minimum 6 characters).\n        </small>\n        <!--<pre *ngIf=\"password.errors\" class=\"margin-20\">{{ password.errors | json }}</pre>-->\n      </div>\n      <div class=\"form-group\">\n        <label for=\"\">Retype password</label>\n        <input type=\"password\" class=\"form-control\" name=\"confirmPassword\"[(ngModel)]=\"user.checkPassword\" \n          required validateEqual=\"password\" reverse=\"false\" #confirmPassword=\"ngModel\">\n        <small [hidden]=\"confirmPassword.valid || (confirmPassword.pristine && !f.submitted)\" class=\"text-danger\">\n          Password mismatch\n        </small>\n        <!--<pre *ngIf=\"confirmPassword.errors\" class=\"margin-20\">{{ confirmPassword.errors | json }}</pre>-->\n      </div>\n      <button type=\"submit\" class=\"btn btn-default\" [disabled]=\"!f.valid\">Submit</button>\n    </form>\n  </div>"
+module.exports = "<div style=\"text-align:center\" class=\"logo\">\n  <br>\n<h1 class=\"logo\">\n  Bezbednost\n</h1>\n<ul>\n    <li><a href=\"/#/logs\" class=\"menu\">Logs</a></li>\n    <li><a href=\"/#/alarms\" class=\"menu\">Alarms</a></li>\n    <li><a href=\"/#/alarms/control\" class=\"menu\">Alarms Control</a></li>\n    <li><a href=\"/#/password\" class=\"menu\">Change password</a></li>\n    <li><a (click)=\"logout()\" class=\"menu\">Log out</a></li>\n\n    \n  </ul>\n\n\n</div>\n<br>\n<div class=\"container\">\n    <h1 style=\"width: 50%; margin-left: 20%;\">Change password</h1>\n    <form style=\"width: 50%; margin-left: 20%;\" #f=\"ngForm\" novalidate (ngSubmit)=\"save(f.value, f.valid)\">\n        <div class=\"form-group\">\n            <label for=\"\">Current password</label>\n            <input type=\"password\" class=\"form-control\" name=\"username\" [(ngModel)]=\"user.currentPassword\" \n              required #username=\"ngModel\">\n            <small [hidden]=\"username.valid || (username.pristine && !f.submitted)\" class=\"text-danger\">\n              Password is required.\n            </small>\n            <!--<pre *ngIf=\"username.errors\" class=\"margin-20\">{{ username.errors | json }}</pre>-->\n          </div>\n      <div class=\"form-group\">\n        <label for=\"\">Password</label>\n        <input type=\"password\" class=\"form-control\" name=\"password\" [(ngModel)]=\"user.newPassword\" \n          required validateEqual=\"confirmPassword\" reverse=\"true\" #password=\"ngModel\" minlength=\"6\">\n        <small [hidden]=\"password.valid || (password.pristine && !f.submitted)\" class=\"text-danger\">\n          Password is required (minimum 6 characters).\n        </small>\n        <!--<pre *ngIf=\"password.errors\" class=\"margin-20\">{{ password.errors | json }}</pre>-->\n      </div>\n      <div class=\"form-group\">\n        <label for=\"\">Retype password</label>\n        <input type=\"password\" class=\"form-control\" name=\"confirmPassword\"[(ngModel)]=\"user.checkPassword\" \n          required validateEqual=\"password\" reverse=\"false\" #confirmPassword=\"ngModel\">\n        <small [hidden]=\"confirmPassword.valid || (confirmPassword.pristine && !f.submitted)\" class=\"text-danger\">\n          Password mismatch\n        </small>\n        <!--<pre *ngIf=\"confirmPassword.errors\" class=\"margin-20\">{{ confirmPassword.errors | json }}</pre>-->\n      </div>\n      <button type=\"submit\" class=\"btn btn-default\" [disabled]=\"!f.valid\">Submit</button>\n    </form>\n  </div>"
 
 /***/ }),
 
@@ -308,6 +771,9 @@ var ChangePasswordComponent = /** @class */ (function () {
     ChangePasswordComponent.prototype.cancel = function () {
         this.location.back();
     };
+    ChangePasswordComponent.prototype.logout = function () {
+        this.auth.logout();
+    };
     ChangePasswordComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-change-password',
@@ -316,7 +782,7 @@ var ChangePasswordComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__login_auth_service__["a" /* AuthService */],
             __WEBPACK_IMPORTED_MODULE_1__angular_common__["Location"],
-            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */],
             __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"],
             __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"]])
     ], ChangePasswordComponent);
@@ -428,7 +894,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  home works!\n</p>\n<button (click)=\"logout()\">Log out</button>\n<button (click)=\"me()\">mee</button>\n<button (click)=\"changePassword()\">Change password</button>\n"
+module.exports = "<div style=\"text-align:center\" class=\"logo\">\n  <br>\n<h1 class=\"logo\">\n  Bezbednost\n</h1>\n<ul>\n    <li><a href=\"/#/logs\" class=\"menu\">Logs</a></li>\n    <li><a href=\"/#/alarms\" class=\"menu\">Alarms</a></li>\n    <li><a href=\"/#/alarms/control\" class=\"menu\">Alarms Control</a></li>\n    <li><a href=\"/#/password\" class=\"menu\">Change password</a></li>\n    <li><a (click)=\"logout()\" class=\"menu\">Log out</a></li>\n\n    \n  </ul>\n\n\n</div>\n<br>\n\n<!-- <p>\n  home works!\n</p>\n<button (click)=\"logout()\">Log out</button>\n<button (click)=\"me()\">mee</button>\n<button (click)=\"changePassword()\">Change password</button> -->"
 
 /***/ }),
 
@@ -477,7 +943,7 @@ var HomeComponent = /** @class */ (function () {
             styles: [__webpack_require__("../../../../../src/app/home/home.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__login_auth_service__["a" /* AuthService */],
-            __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]])
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]])
     ], HomeComponent);
     return HomeComponent;
 }());
@@ -551,7 +1017,7 @@ var AuthService = /** @class */ (function () {
     AuthService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]])
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]])
     ], AuthService);
     return AuthService;
 }());
@@ -637,11 +1103,293 @@ var LoginComponent = /** @class */ (function () {
             styles: [__webpack_require__("../../../../../src/app/login/login.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__auth_service__["a" /* AuthService */],
-            __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */],
             __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__["ToastsManager"],
             __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"]])
     ], LoginComponent);
     return LoginComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/logs/logs.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/logs/logs.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div style=\"text-align:center\" class=\"logo\">\n  <br>\n<h1 class=\"logo\">\n  Bezbednost\n</h1>\n<ul>\n    <li><a href=\"/#/logs\" class=\"menu\">Logs</a></li>\n    <li><a href=\"/#/alarms\" class=\"menu\">Alarms</a></li>\n    <li><a href=\"/#/alarms/control\" class=\"menu\">Alarms Control</a></li>\n    <li><a href=\"/#/password\" class=\"menu\">Change password</a></li>\n    <li><a (click)=\"logout()\" class=\"menu\">Log out</a></li>\n\n    \n  </ul>\n\n\n</div>\n<br>\n<div class=\"container\"> \n  <div class=\"container-4\">\n      <input type=\"search\" id=\"update\" [(ngModel)]=\"search_text\"  name=\"search\" placeholder=\"Search\" (keydown.enter)=\"onKeydown($event)\" >\n  </div>          \n  <br>                                                                 \n  <div class=\"table-responsive\">          \n  <table class=\"table table-striped\" infiniteScroll\n  [infiniteScrollDistance]=\"2\"\n  [infiniteScrollThrottle]=\"100\"\n  (scrolled)=\"onScroll()\">\n    <thead>\n      <tr>\n        <th>#</th>\n        <th>Priority value</th>\n        <th>Version</th>\n        <th>Timestamp</th>\n        <th>Hostname</th>\n        <th>Appname</th>\n        <th>Procid</th>\n        <th>Message id</th>\n        <th>Structured data</th>\n        <th>Message</th>\n      </tr>\n    </thead>\n    <tbody  *ngFor=\"let log of logs; let i = index\">\n      <tr>\n        <td>{{i + 1}}</td>\n        <td>{{log.prival}}</td>\n        <td>{{log.version}}</td>\n        <td>{{log.timestamp}}</td>\n        <td>{{log.hostname}}</td>\n        <td>{{log.appname}}</td>\n        <td>{{log.procid}}</td>\n        <td>{{log.msgid}}</td>\n        <td>{{log.sd}}</td>\n        <td>{{log.msg}}</td>\n      </tr>\n    </tbody>\n  </table>\n  </div>\n</div>\n\n\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/logs/logs.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_do__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/do.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logs_service__ = __webpack_require__("../../../../../src/app/logs/logs.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var LogsComponent = /** @class */ (function () {
+    function LogsComponent(logsService, auth) {
+        this.logsService = logsService;
+        this.auth = auth;
+        this.logs = [];
+        this.page = 0;
+        this.search_text = "";
+        this.search_mod = false;
+    }
+    LogsComponent.prototype.ngOnInit = function () {
+        this.getLogs();
+    };
+    LogsComponent.prototype.logout = function () {
+        this.auth.logout();
+    };
+    LogsComponent.prototype.onScroll = function () {
+        if (!this.search_mod) {
+            this.page = this.page + 1;
+            this.getLogs();
+        }
+    };
+    LogsComponent.prototype.getLogs = function () {
+        var _this = this;
+        this.logsService.getLogs(this.page).then(function (logs) {
+            for (var _i = 0, logs_1 = logs; _i < logs_1.length; _i++) {
+                var log = logs_1[_i];
+                _this.logs.push(log);
+            }
+        });
+    };
+    LogsComponent.prototype.onKeydown = function (event) {
+        var _this = this;
+        if (this.search_text == "") {
+            this.page = 0;
+            this.search_mod = false;
+            this.logs = [];
+            this.getLogs();
+        }
+        else {
+            this.page = 0;
+            console.log(this.search_text);
+            this.search_mod = true;
+            this.logsService.search(this.search_text).then(function (res) { return _this.logs = res; });
+        }
+    };
+    LogsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-logs',
+            template: __webpack_require__("../../../../../src/app/logs/logs.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/logs/logs.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__logs_service__["a" /* LogsService */], __WEBPACK_IMPORTED_MODULE_3__login_auth_service__["a" /* AuthService */]])
+    ], LogsComponent);
+    return LogsComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/logs/logs.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogsService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var LogsService = /** @class */ (function () {
+    function LogsService(http) {
+        this.http = http;
+        this.url = '/api/logs';
+        this.RegenerateData = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__["a" /* Subject */]();
+        this.RegenerateData$ = this.RegenerateData.asObservable();
+    }
+    LogsService.prototype.announceChange = function () {
+        this.RegenerateData.next();
+    };
+    LogsService.prototype.getLogs = function (page, size) {
+        if (size === void 0) { size = 20; }
+        var httpParams = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["e" /* HttpParams */]().set('page', page.toString()).set('size', size.toString()).set('sort', 'id,desc');
+        return this.http
+            .get(this.url, { params: httpParams })
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    LogsService.prototype.search = function (text) {
+        return this.http
+            .post(this.url, text)
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    LogsService.prototype.handleError = function (error) {
+        console.error("Error... ", error);
+        return Promise.reject(error.message || error);
+    };
+    LogsService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */]])
+    ], LogsService);
+    return LogsService;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/new-alarm/new-alarm.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/new-alarm/new-alarm.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div style=\"text-align:center\" class=\"logo\">\n  <br>\n<h1 class=\"logo\">\n  Bezbednost\n</h1>\n<ul>\n    <li><a href=\"/#/logs\" class=\"menu\">Logs</a></li>\n    <li><a href=\"/#/alarms\" class=\"menu\">Alarms</a></li>\n    <li><a href=\"/#/alarms/control\" class=\"menu\">Alarms Control</a></li>\n    <li><a href=\"/#/password\" class=\"menu\">Change password</a></li>\n    <li><a (click)=\"logout()\" class=\"menu\">Log out</a></li>\n\n    \n  </ul>\n\n\n</div>\n<br>\n<div class=\"container\">\n  <h2>New alarm</h2>\n  <form class=\"form-horizontal\">\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"name\">Name*:</label>\n      <div class=\"col-sm-10\">\n        <input type=\"text\" class=\"form-control\" id=\"name\"  required minlength=\"4\" placeholder=\"Enter name\" name=\"name\" [(ngModel)]=\"newAlarm.name\">\n\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"desc\">Description*:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"text\" class=\"form-control\" id=\"desc\" placeholder=\"Enter description\" name=\"desc\" [(ngModel)]=\"newAlarm.description\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"vers\">Number*:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"number\" class=\"form-control\" id=\"vers\" name=\"vers\" [(ngModel)]=\"newAlarm.number\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"prival\">Seconds*:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"number\" class=\"form-control\" id=\"prival\"  name=\"prival\" [(ngModel)]=\"newAlarm.seconds\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"vers\">Version:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"number\" class=\"form-control\" id=\"vers\" name=\"vers\" [(ngModel)]=\"newAlarm.version\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"prival\">Prival:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"number\" class=\"form-control\" id=\"prival\"  name=\"prival\" [(ngModel)]=\"newAlarm.prival\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"timestamp\">Timestamp:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"text\" class=\"form-control\" id=\"timestamp\" name=\"timestamp\" [(ngModel)]=\"newAlarm.timestamp\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"hostname\">Hostname:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"text\" class=\"form-control\" id=\"hostname\" name=\"hostname\" [(ngModel)]=\"newAlarm.hostname\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"appname\">Appname:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"text\" class=\"form-control\" id=\"appname\" name=\"appname\" [(ngModel)]=\"newAlarm.appname\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"procid\">Procid:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"text\" class=\"form-control\" id=\"procid\" name=\"procid\" [(ngModel)]=\"newAlarm.procid\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"msgid\">Msgid:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"text\" class=\"form-control\" id=\"msgid\"  name=\"msgid\" [(ngModel)]=\"newAlarm.msgid\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"sd\">Stuctured data:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"text\" class=\"form-control\" id=\"sd\" name=\"sd\" [(ngModel)]=\"newAlarm.sd\">\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"control-label col-sm-2\" for=\"msg\">Mesasge:</label>\n      <div class=\"col-sm-10\">          \n        <input type=\"text\" class=\"form-control\" id=\"msg\" name=\"msg\" [(ngModel)]=\"newAlarm.msg\">\n      </div>\n    </div>\n    <div class=\"form-group\">        \n      <div class=\"col-sm-offset-2 col-sm-10\">\n        <button  class=\"btn btn-default\" (click)=\"newAlarmClick()\">Submit</button>\n        <button  class=\"btn btn-default\" (click)=\"back()\">Back</button>\n      </div>\n    </div>\n    \n  </form>\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/new-alarm/new-alarm.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NewAlarmComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__alarms_alarms_service__ = __webpack_require__("../../../../../src/app/alarms/alarms.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var NewAlarmComponent = /** @class */ (function () {
+    function NewAlarmComponent(alarmService, auth, router) {
+        this.alarmService = alarmService;
+        this.auth = auth;
+        this.router = router;
+        this.newAlarm = {
+            appname: '',
+            description: '',
+            hostname: '',
+            id: 0,
+            logs: [],
+            msg: '',
+            msgid: '',
+            name: '',
+            prival: 0,
+            procid: '',
+            sd: '',
+            timestamp: '',
+            version: 0,
+            number: 0,
+            seconds: 0,
+            canDelete: true
+        };
+    }
+    NewAlarmComponent.prototype.back = function () {
+        this.router.navigate(['/alarms']);
+    };
+    NewAlarmComponent.prototype.logout = function () {
+        this.auth.logout();
+    };
+    NewAlarmComponent.prototype.ngOnInit = function () {
+    };
+    NewAlarmComponent.prototype.newAlarmClick = function () {
+        var _this = this;
+        if (this.newAlarm.name == '') {
+            console.log("name");
+        }
+        else if (this.newAlarm.description == '') {
+            console.log("desc");
+        }
+        else if (this.newAlarm.number < 1) {
+            console.log("num");
+        }
+        else if (this.newAlarm.seconds < 1) {
+            console.log("sec");
+        }
+        else {
+            console.log("newAlarmClick");
+            console.log(this.newAlarm);
+            this.alarmService.createAlarm(this.newAlarm).then(function (res) { return _this.router.navigate(['/alarms', 'control']); }).catch(function (err) { return _this.router.navigate(['/alarms', 'control']); });
+        }
+    };
+    NewAlarmComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-new-alarm',
+            template: __webpack_require__("../../../../../src/app/new-alarm/new-alarm.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/new-alarm/new-alarm.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__alarms_alarms_service__["a" /* AlarmsService */], __WEBPACK_IMPORTED_MODULE_3__login_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]])
+    ], NewAlarmComponent);
+    return NewAlarmComponent;
 }());
 
 
