@@ -4,8 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,8 @@ public class LogService {
 			System.out.println("juhe");
 		}
 		for (Alarm alarm : alarms) {
+			if (alarm.getHostname().equals("!hostname!"))
+				alarm.setHostname(log.getHostname());
 			if (conditions(alarm, log)) {
 				List<Log> logs = findAll();
 				List<Log> logsCond = new ArrayList<>();
@@ -452,6 +456,33 @@ public class LogService {
 			}
 		}
 
+		return logs;
+	}
+	
+	public int count(Date start, Date end) throws ParseException {
+		List<Log> logs= new ArrayList<>();
+		for (Log log : logRepository.findAll()) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			Date logDate = (Date) formatter.parse(log.getTimestamp());
+			if (logDate.before(end) && logDate.after(start))
+				logs.add(log);
+		}
+		return logs.size();
+	}
+	
+	public Map<String,Integer> countByHostname(Date start, Date end) throws ParseException {
+		Map<String, Integer> logs= new HashMap<>();
+		for (Log log : logRepository.findAll()) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			Date logDate = (Date) formatter.parse(log.getTimestamp());
+			if (logDate.before(end) && logDate.after(start))
+				if (logs.containsKey(log.getHostname())) {
+					int x= logs.get(log.getHostname());
+					logs.put(log.getHostname(),x+1);
+				}
+				else
+					logs.put(log.getHostname(), 1);
+		}
 		return logs;
 	}
 

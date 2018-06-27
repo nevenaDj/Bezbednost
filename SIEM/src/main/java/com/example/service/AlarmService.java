@@ -31,57 +31,134 @@ public class AlarmService {
 	private LogRepository logRepository;
 
 	public void save(Alarm alarm) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		Map<Log, Date> date = new HashMap<>();
-		List<Log> logs = logRepository.findAll();
-		List<Log> logsGood = new ArrayList<>();
-		for (Log log : logs) {
-			if (conditions(alarm, log)) {
-				logsGood.add(log);
-			}
-		}
-		for (Log log : logsGood) {
-			System.out.println(log.toString());
-			Date d = (Date) formatter.parse(log.getTimestamp());
-			date.put(log, d);
-		}
-		Map<Log, Date> treeMap = new TreeMap<Log, Date>(new ValueComparator(date));
-		treeMap.putAll(date);
-		Set<Log> logAlarm = new HashSet<>();
-		int temp = 0;
-		for (Entry<Log, Date> entry : treeMap.entrySet()) {
-
-			boolean sd = false;
-			String valueSd = "";
-			if (!alarm.getSd().equals("")) {
-				sd = true;
-				valueSd = getSdValue(entry.getKey().getSd(), alarm.getSd());
-			}
-			boolean forFrom = false;
-			for (Entry<Log, Date> entry2 : treeMap.entrySet()) {
-				if (entry.getKey() == entry2.getKey()) {
-					forFrom = true;
+		if (alarm.getHostname().equals("!hostname!")) {
+			saveByHostname(alarm);
+		} else {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			Map<Log, Date> date = new HashMap<>();
+			List<Log> logs = logRepository.findAll();
+			List<Log> logsGood = new ArrayList<>();
+			for (Log log : logs) {
+				if (conditions(alarm, log)) {
+					logsGood.add(log);
 				}
-				if (entry.getKey() != entry2.getKey()) {
-					if (forFrom) {
-						if (sd) {
-							String value = getSdValue(entry2.getKey().getSd(), alarm.getSd());
-							if (value.equals(valueSd))
-								if ((entry.getValue().getTime() - entry2.getValue().getTime()) / 1000 < alarm
-										.getSeconds())
+			}
+			for (Log log : logsGood) {
+				System.out.println(log.toString());
+				Date d = (Date) formatter.parse(log.getTimestamp());
+				date.put(log, d);
+			}
+			Map<Log, Date> treeMap = new TreeMap<Log, Date>(new ValueComparator(date));
+			treeMap.putAll(date);
+			Set<Log> logAlarm = new HashSet<>();
+			int temp = 0;
+			for (Entry<Log, Date> entry : treeMap.entrySet()) {
+	
+				boolean sd = false;
+				String valueSd = "";
+				if (!alarm.getSd().equals("")) {
+					sd = true;
+					valueSd = getSdValue(entry.getKey().getSd(), alarm.getSd());
+				}
+				boolean forFrom = false;
+				for (Entry<Log, Date> entry2 : treeMap.entrySet()) {
+					if (entry.getKey() == entry2.getKey()) {
+						forFrom = true;
+					}
+					if (entry.getKey() != entry2.getKey()) {
+						if (forFrom) {
+							if (sd) {
+								String value = getSdValue(entry2.getKey().getSd(), alarm.getSd());
+								if (value.equals(valueSd))
+									if ((entry.getValue().getTime() - entry2.getValue().getTime()) / 1000 < alarm
+											.getSeconds())
+										temp++;
+							} else {
+								if ((entry.getValue().getTime() - entry2.getValue().getTime()) / 1000 < alarm.getSeconds())
 									temp++;
-						} else {
-							if ((entry.getValue().getTime() - entry2.getValue().getTime()) / 1000 < alarm.getSeconds())
-								temp++;
+							}
 						}
 					}
 				}
+				if (temp >= alarm.getNumber())
+					logAlarm.add(entry.getKey());
 			}
-			if (temp >= alarm.getNumber())
-				logAlarm.add(entry.getKey());
+			alarm.setLogs(logAlarm);
+			alarmRepository.save(alarm);
+		}
+	}
+	
+	private void saveByHostname(Alarm alarm) throws ParseException {
+		List<Log> logs_all = logRepository.findAll();
+		Map<String, List<Log>> hostname = new HashMap<>();
+		for (Log log : logs_all) {
+			if (hostname.containsKey(log.getHostname())) {
+				List<Log> log_h= hostname.get(log.getHostname());
+				log_h.add(log);
+				hostname.put(log.getHostname(), log_h);
+			} else {
+				List<Log> log_h=new ArrayList<>();
+				log_h.add(log);
+				hostname.put(log.getHostname(), log_h);
+			}
+		}
+		Set<Log> logAlarm = new HashSet<>();
+		for (String host : hostname.keySet()) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			Map<Log, Date> date = new HashMap<>();
+			List<Log> logs = hostname.get(host);
+			List<Log> logsGood = new ArrayList<>();
+			alarm.setHostname(host);
+			for (Log log : logs) {
+				if (conditions(alarm, log)) {
+					logsGood.add(log);
+				}
+			}
+			for (Log log : logsGood) {
+				System.out.println(log.toString());
+				Date d = (Date) formatter.parse(log.getTimestamp());
+				date.put(log, d);
+			}
+			Map<Log, Date> treeMap = new TreeMap<Log, Date>(new ValueComparator(date));
+			treeMap.putAll(date);
+
+			int temp = 0;
+			for (Entry<Log, Date> entry : treeMap.entrySet()) {
+	
+				boolean sd = false;
+				String valueSd = "";
+				if (!alarm.getSd().equals("")) {
+					sd = true;
+					valueSd = getSdValue(entry.getKey().getSd(), alarm.getSd());
+				}
+				boolean forFrom = false;
+				for (Entry<Log, Date> entry2 : treeMap.entrySet()) {
+					if (entry.getKey() == entry2.getKey()) {
+						forFrom = true;
+					}
+					if (entry.getKey() != entry2.getKey()) {
+						if (forFrom) {
+							if (sd) {
+								String value = getSdValue(entry2.getKey().getSd(), alarm.getSd());
+								if (value.equals(valueSd))
+									if ((entry.getValue().getTime() - entry2.getValue().getTime()) / 1000 < alarm
+											.getSeconds())
+										temp++;
+							} else {
+								if ((entry.getValue().getTime() - entry2.getValue().getTime()) / 1000 < alarm.getSeconds())
+									temp++;
+							}
+						}
+					}
+				}
+				if (temp >= alarm.getNumber())
+					logAlarm.add(entry.getKey());
+			}
 		}
 		alarm.setLogs(logAlarm);
 		alarmRepository.save(alarm);
+		
+		
 	}
 
 	private String getSdValue(String sd, String alarmValue) {
@@ -155,6 +232,37 @@ public class AlarmService {
 
 	public void remove(Alarm alarm) {
 		alarmRepository.delete(alarm);
+	}
+	
+	public int count(Date start, Date end) throws ParseException {
+		List<Log> logs= new ArrayList<>();
+		for (Alarm alarm : alarmRepository.findAll()) {
+			for (Log log : alarm.getLogs()) {
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+				Date logDate = (Date) formatter.parse(log.getTimestamp());
+				if (logDate.before(end) && logDate.after(start))
+					logs.add(log);
+			}
+		}
+		return logs.size();
+	}
+	
+	public Map<String,Integer> countByHostname(Date start, Date end) throws ParseException {
+		Map<String, Integer> logs= new HashMap<>();
+		for (Alarm alarm : alarmRepository.findAll()) {
+			for (Log log : alarm.getLogs()) {
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+				Date logDate = (Date) formatter.parse(log.getTimestamp());
+				if (logDate.before(end) && logDate.after(start))
+					if (logs.containsKey(log.getHostname())) {
+						int x= logs.get(log.getHostname());
+						logs.put(log.getHostname(),x+1);
+					}
+					else
+						logs.put(log.getHostname(), 1);
+			}
+		}
+		return logs;
 	}
 
 }
