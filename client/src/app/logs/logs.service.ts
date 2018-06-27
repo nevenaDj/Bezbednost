@@ -3,6 +3,7 @@ import { LogInterface } from '../model/log';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Subject } from 'rxjs/Rx';
+import { ReportInterface } from '../model/report';
 
 @Injectable()
 export class LogsService {
@@ -32,6 +33,27 @@ export class LogsService {
   search(text:String):Promise<LogInterface[]>{
     return this.http
     .post<LogInterface[]>(this.url, text)
+    .toPromise()
+    .then(res => res)
+    .catch(this.handleError);
+  }
+
+  getCount(start:Date, end:Date):Promise<any>{
+    this.url='/api/logs/count';
+    let time= {'start':start, 'end':end};
+    return this.http
+    .post<any>(this.url, time)
+    .toPromise()
+    .then(res => res)
+    .catch(this.handleError);
+  }
+
+
+  getCountHostname(start:Date, end:Date):Promise<ReportInterface[]>{
+    this.url='/api/logs/count/host';
+    let time= {'start':start, 'end':end};
+    return this.http
+    .post<ReportInterface[]>(this.url, time)
     .toPromise()
     .then(res => res)
     .catch(this.handleError);

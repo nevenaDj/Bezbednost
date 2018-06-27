@@ -29,7 +29,12 @@ export class LoginComponent implements OnInit {
   login(){
     localStorage.removeItem('token');
     this.auth.login(this.user.username, this.user.password)
-        .then(res => this.router.navigate(['/home']))
+        .then(res => {
+          if (this.auth.isAdmin())
+            this.router.navigate(['/home'])
+          else
+            this.router.navigate(['/user/home'])
+        })
         .catch(res => this.toastr.error('Invalid username/password.'));
   }
 

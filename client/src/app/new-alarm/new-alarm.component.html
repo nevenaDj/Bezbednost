@@ -4,8 +4,6 @@
   Bezbednost
 </h1>
 <ul>
-    <li><a href="/#/logs" class="menu">Logs</a></li>
-    <li><a href="/#/alarms" class="menu">Alarms</a></li>
     <li><a href="/#/alarms/control" class="menu">Alarms Control</a></li>
     <li><a href="/#/password" class="menu">Change password</a></li>
     <li><a (click)="logout()" class="menu">Log out</a></li>
@@ -64,8 +62,13 @@
     </div>
     <div class="form-group">
       <label class="control-label col-sm-2" for="hostname">Hostname:</label>
-      <div class="col-sm-10">          
-        <input type="text" class="form-control" id="hostname" name="hostname" [(ngModel)]="newAlarm.hostname">
+      <div class="col-sm-10">
+        <select class="form-control" id="hostname" name="hostname" [(ngModel)]="type" >
+          <option selected value="hostname">hostname</option>
+          <option value="unique">unique</option>
+          <option value="all">all</option>
+        </select>
+        <input *ngIf="type=='unique'" type="text" class="form-control" id="hostname" name="hostname" [(ngModel)]="newAlarm.hostname">
       </div>
     </div>
     <div class="form-group">

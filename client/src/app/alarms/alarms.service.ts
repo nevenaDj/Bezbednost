@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { AlarmInterface } from '../model/alarm';
+import { ReportInterface } from '../model/report';
 
 @Injectable()
 export class AlarmsService {
@@ -50,12 +51,32 @@ export class AlarmsService {
   createAlarm(alarm: AlarmInterface):Promise<void> {
     let url=this.url;
     return this.http
-    .post<AlarmInterface>(url, alarm, {'headers':this.headers})
+    .post<void>(url, alarm, {'headers':this.headers})
     .toPromise()
     .then(res => res)
     .catch(this.handleError);
   }
 
+  getCount(start:Date, end:Date):Promise<any>{
+    this.url='/api/alarms/count';
+    let time= {'start':start, 'end':end};
+    return this.http
+    .post<any>(this.url, time)
+    .toPromise()
+    .then(res => res)
+    .catch(this.handleError);
+  }
+
+
+  getCountHostname(start:Date, end:Date):Promise<ReportInterface[]>{
+    this.url='/api/alarms/count/host';
+    let time= {'start':start, 'end':end};
+    return this.http
+    .post<ReportInterface[]>(this.url, time)
+    .toPromise()
+    .then(res => res)
+    .catch(this.handleError);
+  }
 
   private handleError(error: any): Promise<any> {
     console.error("Error... ", error);

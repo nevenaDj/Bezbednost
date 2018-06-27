@@ -8,6 +8,8 @@ import { AlarmsComponent } from './alarms/alarms.component';
 import { AlarmsControlComponent } from './alarms-control/alarms-control.component';
 import { NewAlarmComponent } from './new-alarm/new-alarm.component';
 import { AlarmDetailsComponent } from './alarm-details/alarm-details.component';
+import { UserHomeComponent } from './user-home/user-home.component';
+import { ReportsComponent } from './reports/reports.component';
 
 const routes: Routes = [
   { 
@@ -26,6 +28,10 @@ const routes: Routes = [
     path: 'alarms/:id', component: AlarmDetailsComponent
   },
   { 
+    path: 'user/home', 
+    component: UserHomeComponent
+  },
+  { 
     path: 'home', 
     component: HomeComponent
   },
@@ -36,6 +42,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'reports',
+    component: ReportsComponent
   },
   { path: '**', redirectTo: 'login' }
 ];

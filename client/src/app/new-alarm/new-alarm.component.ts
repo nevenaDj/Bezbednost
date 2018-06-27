@@ -11,6 +11,8 @@ import { AuthService } from '../login/auth.service';
 })
 export class NewAlarmComponent implements OnInit {
 
+  type="hostname";
+
   newAlarm: AlarmInterface;
   constructor(private alarmService: AlarmsService, private auth: AuthService, private router: Router) { 
     this.newAlarm={
@@ -54,7 +56,8 @@ export class NewAlarmComponent implements OnInit {
     } else if(this.newAlarm.seconds<1){
       console.log("sec");
     }else{
-
+      if (this.type=="hostname")
+        this.newAlarm.hostname="!hostname!"
       console.log("newAlarmClick");
       console.log(this.newAlarm);
       this.alarmService.createAlarm(this.newAlarm).then(

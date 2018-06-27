@@ -13,6 +13,7 @@ import { AuthService } from '../login/auth.service';
 })
 export class ChangePasswordComponent implements OnInit {
   user: UserPassInterface;
+  admin:boolean=false;
 
   constructor(private auth: AuthService,
               private location: Location,
@@ -31,6 +32,8 @@ export class ChangePasswordComponent implements OnInit {
     if (localStorage.getItem('token') == null){
       this.router.navigate(['login']);
     }
+    if (this.auth.isAdmin())
+      this.admin=true;
   }
 
   save(model: UserPassInterface, isValid: boolean){

@@ -10,7 +10,7 @@ import { AuthService } from '../login/auth.service';
   styleUrls: ['./alarm-details.component.css']
 })
 export class AlarmDetailsComponent implements OnInit {
-
+  admin:boolean=false
   alarm: AlarmInterface;
   constructor(private alarmService: AlarmsService, private auth: AuthService,private route: ActivatedRoute, private router: Router) { 
     this.alarm={
@@ -32,12 +32,15 @@ export class AlarmDetailsComponent implements OnInit {
       canDelete:true
     }
 
+
   }
 
   ngOnInit() {
     this.alarmService.getAlarm(+this.route.snapshot.params['id']).then(
       res=>this.alarm=res
     ).catch(err=>this.router.navigate(['alarms']))
+    if (this.auth.isAdmin())
+      this.admin=true;
   }
 
   logout(){
