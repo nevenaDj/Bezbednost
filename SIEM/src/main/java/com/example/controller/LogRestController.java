@@ -1,8 +1,11 @@
 package com.example.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.model.Alarm;
 import com.example.model.Log;
+import com.example.model.ReportDTO;
+import com.example.model.TimeDTO;
 import com.example.service.AlarmService;
 import com.example.service.LogService;
 
@@ -91,5 +96,46 @@ public class LogRestController {
 		List<Alarm> alarm = alarmService.findAll();
 
 		return new ResponseEntity<>(alarm, HttpStatus.OK);
+	}
+	
+
+	@RequestMapping(value = "/api/logs/count", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+	public ResponseEntity<Integer> getLogsCount(@RequestBody TimeDTO time) throws ParseException {
+		int x= logService.count(time.getStart(), time.getEnd());
+		return new ResponseEntity<>(x, HttpStatus.OK);
+	}
+	
+
+	@RequestMapping(value = "/api/logs/count/host", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+	public ResponseEntity<List<ReportDTO>> getLogsCountHost(@RequestBody TimeDTO time) throws ParseException {
+		Map<String,Integer> x= logService.countByHostname(time.getStart(), time.getEnd());
+		List<ReportDTO> ret = new ArrayList<>();
+		for (String key : x.keySet()) {
+			ReportDTO r= new ReportDTO(key, x.get(key));
+			ret.add(r);
+		}
+		return new ResponseEntity<>(ret, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/api/alarms/count", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+	public ResponseEntity<Integer> getAlarmsCount(@RequestBody TimeDTO time) throws ParseException {
+		int x= alarmService.count(time.getStart(), time.getEnd());
+		return new ResponseEntity<>(x, HttpStatus.OK);
+	}
+	
+
+	@RequestMapping(value = "/api/alarms/count/host", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+	public ResponseEntity<List<ReportDTO>> getAlarmsCountHost(@RequestBody TimeDTO time) throws ParseException {
+		Map<String,Integer> x= alarmService.countByHostname(time.getStart(), time.getEnd());
+		List<ReportDTO> ret = new ArrayList<>();
+		for (String key : x.keySet()) {
+			ReportDTO r= new ReportDTO(key, x.get(key));
+			ret.add(r);
+		}
+		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}
 }
