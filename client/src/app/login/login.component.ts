@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('token');
     this.auth.login(this.user.username, this.user.password)
         .then(res => this.router.navigate(['/home']))
-        .catch(res => this.toastr.error('Invalid username/password.'));
+        .catch(res => this.toastr.error('Invalid username/password or account is blocked.'));
   }
 
 }

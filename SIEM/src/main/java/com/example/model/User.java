@@ -28,6 +28,8 @@ public class User {
 	@Size(min = 8, message = "Minimum password length: 8 characters")
 	private String password;
 
+	private boolean enabled;
+
 	@ElementCollection(fetch = FetchType.EAGER)
 	List<Role> roles;
 
@@ -71,4 +73,11 @@ public class User {
 		this.roles = roles;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(final boolean enabled) {
+		this.enabled = enabled;
+	}
 }
