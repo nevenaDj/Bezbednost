@@ -1,14 +1,17 @@
 package com.example.model;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -18,20 +21,23 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	//@Size(min = 4, max = 255, message = "Minimum username length: 4 characters")
-	//@Column(unique = true, nullable = false)
+	@Size(min = 4, max = 255, message = "Minimum username length: 4 characters")
+	@Column(unique = true, nullable = false)
 	private String username;
 
-	//@Column(unique = true, nullable = false)
+	@Column(unique = true, nullable = false)
 	private String email;
 
-	//@Size(min = 4, message = "Minimum password length: 8 characters")
+	@Size(min = 4, message = "Minimum password length: 8 characters")
 	private String password;
 
 	private boolean enabled;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	List<Role> roles;
+	private Date date;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private Collection<Role> roles;
 
 	public Integer getId() {
 		return id;
@@ -65,11 +71,11 @@ public class User {
 		this.password = password;
 	}
 
-	public List<Role> getRoles() {
+	public Collection<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Collection<Role> roles) {
 		this.roles = roles;
 	}
 
@@ -80,4 +86,13 @@ public class User {
 	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 }

@@ -93,8 +93,15 @@ var AlarmDetailsComponent = /** @class */ (function () {
     AlarmDetailsComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.alarmService.getAlarm(+this.route.snapshot.params['id']).then(function (res) { return _this.alarm = res; }).catch(function (err) { return _this.router.navigate(['alarms']); });
-        if (this.auth.isAdmin())
-            this.admin = true;
+        this.auth.me().
+            then(function (m) {
+            for (var _i = 0, _a = m.roles; _i < _a.length; _i++) {
+                var a = _a[_i];
+                if (a["name"] == 'ROLE_ADMIN') {
+                    _this.admin = true;
+                }
+            }
+        });
     };
     AlarmDetailsComponent.prototype.logout = function () {
         this.auth.logout();
@@ -802,11 +809,19 @@ var ChangePasswordComponent = /** @class */ (function () {
         };
     }
     ChangePasswordComponent.prototype.ngOnInit = function () {
+        var _this = this;
         if (localStorage.getItem('token') == null) {
             this.router.navigate(['login']);
         }
-        if (this.auth.isAdmin())
-            this.admin = true;
+        this.auth.me().
+            then(function (m) {
+            for (var _i = 0, _a = m.roles; _i < _a.length; _i++) {
+                var a = _a[_i];
+                if (a["name"] == 'ROLE_ADMIN') {
+                    _this.admin = true;
+                }
+            }
+        });
     };
     ChangePasswordComponent.prototype.save = function (model, isValid) {
         var _this = this;
@@ -1010,8 +1025,6 @@ var HomeComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jwt_decode__ = __webpack_require__("../../../../jwt-decode/lib/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jwt_decode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_jwt_decode__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1024,21 +1037,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var AuthService = /** @class */ (function () {
     function AuthService(http, router) {
         this.http = http;
         this.router = router;
     }
     AuthService.prototype.login = function (username, password) {
-        var _this = this;
         return this.http
             .post('/api/login', { username: username, password: password }, { responseType: 'text' })
             .toPromise()
             .then(function (res) {
             console.log('sucess login ');
             localStorage.setItem('token', res);
-            _this.setRoles();
         })
             .catch(this.handleError);
     };
@@ -1047,30 +1057,32 @@ var AuthService = /** @class */ (function () {
         this.router.navigate(['login']);
     };
     AuthService.prototype.redirect = function () {
+        var _this = this;
         if (localStorage.getItem('token') == null) {
             this.router.navigate(['login']);
         }
-        else if (this.isAdmin()) {
-            this.router.navigate(['home']);
-        }
-        else
-            this.router.navigate(['user/home']);
+        this.me().
+            then(function (m) {
+            for (var _i = 0, _a = m.roles; _i < _a.length; _i++) {
+                var a = _a[_i];
+                if (a["name"] == 'ROLE_ADMIN') {
+                    _this.router.navigate(['/home']);
+                }
+                if (a["name"] == 'ROLE_USER') {
+                    _this.router.navigate(['/user/home']);
+                }
+            }
+        });
     };
-    AuthService.prototype.isAdmin = function () {
+    /*
+        isAdmin(): boolean {
         return this.roles.includes('ROLE_ADMIN');
-    };
-    AuthService.prototype.isUser = function () {
+      }
+    
+      isUser(): boolean {
         return this.roles.includes('ROLE_USER');
-    };
-    AuthService.prototype.setRoles = function () {
-        var token = localStorage.getItem('token');
-        var tokenPayload = __WEBPACK_IMPORTED_MODULE_3_jwt_decode__(token);
-        this.roles = [];
-        for (var _i = 0, _a = tokenPayload.auth; _i < _a.length; _i++) {
-            var a = _a[_i];
-            this.roles.push(a['authority']);
-        }
-    };
+      }
+    */
     AuthService.prototype.me = function () {
         return this.http
             .get('/api/me')
@@ -1169,12 +1181,29 @@ var LoginComponent = /** @class */ (function () {
         localStorage.removeItem('token');
         this.auth.login(this.user.username, this.user.password)
             .then(function (res) {
-            if (_this.auth.isAdmin())
-                _this.router.navigate(['/home']);
-            else
-                _this.router.navigate(['/user/home']);
+            _this.auth.me().
+                then(function (m) {
+                for (var _i = 0, _a = m.roles; _i < _a.length; _i++) {
+                    var a = _a[_i];
+                    if (a["name"] == 'ROLE_ADMIN') {
+                        _this.router.navigate(['/home']);
+                    }
+                    if (a["name"] == 'ROLE_USER') {
+                        _this.router.navigate(['/user/home']);
+                    }
+                }
+            });
         })
-            .catch(function (res) { return _this.toastr.error('Invalid username/password.'); });
+            .catch(function (res) {
+            console.log(res.status);
+            console.log(res);
+            if (res == 'Http failure response for https://localhost:8443/api/login: 422 OK') {
+                _this.toastr.error('User is disabled.');
+            }
+            else {
+                _this.toastr.error('Invalid username/password.');
+            }
+        });
     };
     LoginComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({

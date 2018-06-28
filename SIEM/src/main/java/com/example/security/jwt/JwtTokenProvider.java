@@ -3,6 +3,8 @@ package com.example.security.jwt;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -16,11 +18,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.example.exception.CustomException;
+import com.example.model.Privilege;
 import com.example.model.Role;
 import com.example.security.MyUserDetails;
 
@@ -49,11 +53,10 @@ public class JwtTokenProvider {
 		privateKey = kr.readPrivateKey("src\\main\\resources\\cert-chain.p12", "secretpassword", "1", "secretpassword");
 	}
 
-	public String createToken(String username, List<Role> roles) {
+	public String createToken(String username, Collection<Role> roles) {
 
 		Claims claims = Jwts.claims().setSubject(username);
-		claims.put("auth", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority()))
-				.filter(Objects::nonNull).collect(Collectors.toList()));
+		claims.put("auth", getAuthorities(roles));
 
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -90,6 +93,32 @@ public class JwtTokenProvider {
 		} catch (JwtException | IllegalArgumentException e) {
 			throw new CustomException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
+
+		return getGrantedAuthorities(getPrivileges(roles));
+	}
+
+	private List<String> getPrivileges(Collection<Role> roles) {
+
+		List<String> privileges = new ArrayList<>();
+		List<Privilege> collection = new ArrayList<>();
+		for (Role role : roles) {
+			collection.addAll(role.getPrivileges());
+		}
+		for (Privilege item : collection) {
+			privileges.add(item.getName());
+		}
+		return privileges;
+	}
+
+	private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		for (String privilege : privileges) {
+			authorities.add(new SimpleGrantedAuthority(privilege));
+		}
+		return authorities;
 	}
 
 }

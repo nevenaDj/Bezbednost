@@ -35,7 +35,6 @@ public class LogRestController {
 	private AlarmService alarmService;
 
 	@RequestMapping(value = "/api/logs", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<List<Log>> getLogs(Pageable page) {
 		Page<Log> logs = logService.findAll(page);
 		List<Log> log_ret = new ArrayList<Log>();
@@ -47,14 +46,12 @@ public class LogRestController {
 	}
 
 	@RequestMapping(value = "/api/logs", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<List<Log>> getLogsSearch(@RequestBody String search) {
 		List<Log> logs = logService.findAllBySearch(search);
 		return new ResponseEntity<>(logs, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/api/alarms", method = RequestMethod.POST, consumes = "application/json")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> createAlarm(@RequestBody Alarm alarm) throws ParseException {
 		System.out.println(alarm.toString());
 		alarmService.save(alarm);
@@ -62,7 +59,6 @@ public class LogRestController {
 	}
 
 	@RequestMapping(value = "/api/alarms/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> deleteAlarm(@PathVariable("id") Long id) {
 		Optional<Alarm> a = alarmService.findOne(id);
 		Alarm alarm = null;
@@ -78,7 +74,6 @@ public class LogRestController {
 	}
 
 	@RequestMapping(value = "/api/alarms/{id}", method = RequestMethod.GET, produces = "application/json")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<Alarm> getAlarm(@PathVariable("id") Long id) {
 		Optional<Alarm> a = alarmService.findOne(id);
 		Alarm alarm = null;
@@ -91,49 +86,41 @@ public class LogRestController {
 	}
 
 	@RequestMapping(value = "/api/alarms", method = RequestMethod.GET, produces = "application/json")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<List<Alarm>> getAlarms() {
 		List<Alarm> alarm = alarmService.findAll();
 
 		return new ResponseEntity<>(alarm, HttpStatus.OK);
 	}
-	
 
 	@RequestMapping(value = "/api/logs/count", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<Integer> getLogsCount(@RequestBody TimeDTO time) throws ParseException {
-		int x= logService.count(time.getStart(), time.getEnd());
+		int x = logService.count(time.getStart(), time.getEnd());
 		return new ResponseEntity<>(x, HttpStatus.OK);
 	}
-	
 
 	@RequestMapping(value = "/api/logs/count/host", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<List<ReportDTO>> getLogsCountHost(@RequestBody TimeDTO time) throws ParseException {
-		Map<String,Integer> x= logService.countByHostname(time.getStart(), time.getEnd());
+		Map<String, Integer> x = logService.countByHostname(time.getStart(), time.getEnd());
 		List<ReportDTO> ret = new ArrayList<>();
 		for (String key : x.keySet()) {
-			ReportDTO r= new ReportDTO(key, x.get(key));
+			ReportDTO r = new ReportDTO(key, x.get(key));
 			ret.add(r);
 		}
 		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/api/alarms/count", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<Integer> getAlarmsCount(@RequestBody TimeDTO time) throws ParseException {
-		int x= alarmService.count(time.getStart(), time.getEnd());
+		int x = alarmService.count(time.getStart(), time.getEnd());
 		return new ResponseEntity<>(x, HttpStatus.OK);
 	}
-	
 
 	@RequestMapping(value = "/api/alarms/count/host", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<List<ReportDTO>> getAlarmsCountHost(@RequestBody TimeDTO time) throws ParseException {
-		Map<String,Integer> x= alarmService.countByHostname(time.getStart(), time.getEnd());
+		Map<String, Integer> x = alarmService.countByHostname(time.getStart(), time.getEnd());
 		List<ReportDTO> ret = new ArrayList<>();
 		for (String key : x.keySet()) {
-			ReportDTO r= new ReportDTO(key, x.get(key));
+			ReportDTO r = new ReportDTO(key, x.get(key));
 			ret.add(r);
 		}
 		return new ResponseEntity<>(ret, HttpStatus.OK);
