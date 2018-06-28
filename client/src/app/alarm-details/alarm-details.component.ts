@@ -39,8 +39,15 @@ export class AlarmDetailsComponent implements OnInit {
     this.alarmService.getAlarm(+this.route.snapshot.params['id']).then(
       res=>this.alarm=res
     ).catch(err=>this.router.navigate(['alarms']))
-    if (this.auth.isAdmin())
-      this.admin=true;
+    this.auth.me().
+    then(m => {
+      for (let a of m.roles){
+        if (a["name"] == 'ROLE_ADMIN'){
+          this.admin=true;
+        }
+      }
+})
+      
   }
 
   logout(){
