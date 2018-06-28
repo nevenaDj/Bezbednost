@@ -32,8 +32,14 @@ export class ChangePasswordComponent implements OnInit {
     if (localStorage.getItem('token') == null){
       this.router.navigate(['login']);
     }
-    if (this.auth.isAdmin())
-      this.admin=true;
+    this.auth.me().
+    then(m => {
+      for (let a of m.roles){
+        if (a["name"] == 'ROLE_ADMIN'){
+          this.admin=true;
+        }
+      }
+    })
   }
 
   save(model: UserPassInterface, isValid: boolean){

@@ -3,6 +3,8 @@ package com.example.security.jwt;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -91,6 +93,32 @@ public class JwtTokenProvider {
 		} catch (JwtException | IllegalArgumentException e) {
 			throw new CustomException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
+
+		return getGrantedAuthorities(getPrivileges(roles));
+	}
+
+	private List<String> getPrivileges(Collection<Role> roles) {
+
+		List<String> privileges = new ArrayList<>();
+		List<Privilege> collection = new ArrayList<>();
+		for (Role role : roles) {
+			collection.addAll(role.getPrivileges());
+		}
+		for (Privilege item : collection) {
+			privileges.add(item.getName());
+		}
+		return privileges;
+	}
+
+	private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		for (String privilege : privileges) {
+			authorities.add(new SimpleGrantedAuthority(privilege));
+		}
+		return authorities;
 	}
 
 }

@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.dto.UserCredentialsDTO;
 import com.example.dto.UserDataDTO;
 import com.example.dto.UserResponseDTO;
+import com.example.exception.CustomException;
 import com.example.model.User;
+import com.example.service.UserAttemptService;
 import com.example.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -39,6 +41,9 @@ public class UserController {
 	private UserService userService;
 
 	@Autowired
+	private UserAttemptService userAttemptService;
+
+	@Autowired
 	private ModelMapper modelMapper;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
@@ -46,9 +51,10 @@ public class UserController {
 		try {
 			String jwt = userService.signin(credentials.getUsername(), credentials.getPassword());
 			return new ResponseEntity<>(jwt, HttpStatus.OK);
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} catch (CustomException e) {
+			userAttemptService.addUserAttempt(credentials.getUsername());
+			logger.info(e.getMessage() + "   " + e.getHttpStatus());
+			return new ResponseEntity<>(e.getHttpStatus());
 		}
 	}
 
@@ -64,7 +70,7 @@ public class UserController {
 	}
 
 	@PostMapping("/password")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	// @PreAuthorize("hasRole('ROLE_ADMIN')")
 	@ApiOperation(value = "${UserController.signup}")
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //
@@ -81,7 +87,6 @@ public class UserController {
 	}
 
 	@GetMapping(value = "/{username}")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@ApiOperation(value = "${UserController.search}", response = UserResponseDTO.class)
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //
@@ -93,7 +98,6 @@ public class UserController {
 	}
 
 	@GetMapping(value = "/me")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	@ApiOperation(value = "${UserController.me}", response = UserResponseDTO.class)
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //

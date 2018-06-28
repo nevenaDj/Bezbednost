@@ -16,10 +16,9 @@ export class AuthService {
     .post('/api/login', {username, password}, {responseType: 'text'})
     .toPromise()
     .then(res => {
-      console.log('sucess login ') 
+      console.log('sucess login ') ;
       localStorage.setItem('token', res);
-      this.setRoles(); }
-    )
+    })
     .catch(this.handleError);
   }
 
@@ -31,12 +30,20 @@ export class AuthService {
   redirect(): void {
     if (localStorage.getItem('token') == null){
       this.router.navigate(['login']);
-    }else if (this.isAdmin()){
-      this.router.navigate(['home']);
-    } else 
-    this.router.navigate(['user/home']);
+    } 
+    this.me().
+      then(m => {
+      for (let a of m.roles){
+        if (a["name"] == 'ROLE_ADMIN'){
+          this.router.navigate(['/home'])
+        }
+        if (a["name"] == 'ROLE_USER'){
+          this.router.navigate(['/user/home'])
+        }
+      }
+})
   }
-
+/*
     isAdmin(): boolean {
     return this.roles.includes('ROLE_ADMIN');
   }
@@ -44,16 +51,7 @@ export class AuthService {
   isUser(): boolean {
     return this.roles.includes('ROLE_USER');
   }
-
-
-  private setRoles(): void {
-    const token = localStorage.getItem('token');
-    const tokenPayload = decode(token);
-    this.roles=[]
-    for (let a of tokenPayload.auth)
-    this.roles.push(a['authority']);
-  }
-
+*/
   me(): Promise<any>{
     return this.http
     .get('/api/me')

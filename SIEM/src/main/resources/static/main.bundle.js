@@ -93,8 +93,15 @@ var AlarmDetailsComponent = /** @class */ (function () {
     AlarmDetailsComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.alarmService.getAlarm(+this.route.snapshot.params['id']).then(function (res) { return _this.alarm = res; }).catch(function (err) { return _this.router.navigate(['alarms']); });
-        if (this.auth.isAdmin())
-            this.admin = true;
+        this.auth.me().
+            then(function (m) {
+            for (var _i = 0, _a = m.roles; _i < _a.length; _i++) {
+                var a = _a[_i];
+                if (a["name"] == 'ROLE_ADMIN') {
+                    _this.admin = true;
+                }
+            }
+        });
     };
     AlarmDetailsComponent.prototype.logout = function () {
         this.auth.logout();
@@ -255,6 +262,7 @@ module.exports = "<div style=\"text-align:center\" class=\"logo\">\n  <br>\n<h1 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__alarms_service__ = __webpack_require__("../../../../../src/app/alarms/alarms.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
+<<<<<<< HEAD
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -355,6 +363,106 @@ var AlarmsComponent = /** @class */ (function () {
     return AlarmsComponent;
 }());
 
+=======
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var AlarmsComponent = /** @class */ (function () {
+    function AlarmsComponent(router, auth, alarmService) {
+        this.router = router;
+        this.auth = auth;
+        this.alarmService = alarmService;
+        this.show = false;
+        this.alarms = [];
+        this.allAlarms = [];
+        this.alarmList = { items: [] };
+    }
+    AlarmsComponent.prototype.ngOnInit = function () {
+        this.getAlarms();
+    };
+    AlarmsComponent.prototype.logout = function () {
+        this.auth.logout();
+    };
+    AlarmsComponent.prototype.getAlarms = function () {
+        var _this = this;
+        this.alarmService.getAlarms().then(function (res) {
+            _this.alarms = res;
+            for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
+                var a = res_1[_i];
+                _this.allAlarms.push(a);
+            }
+            for (var _a = 0, _b = _this.alarms; _a < _b.length; _a++) {
+                var alar = _b[_a];
+                var item = { alarm: alar, show: true };
+                _this.alarmList.items.push(item);
+            }
+            console.log(_this.alarmList.items);
+        });
+    };
+    AlarmsComponent.prototype.showAlarm = function (id) {
+        console.log(id);
+        var path = '/#/alarms/' + id;
+        this.router.navigate(['/alarms', id]);
+    };
+    AlarmsComponent.prototype.showHide = function () {
+        if (this.show)
+            this.show = false;
+        else
+            this.show = true;
+    };
+    AlarmsComponent.prototype.remove = function (alarm) {
+        console.log('remove');
+        for (var a = 0; a < this.alarms.length; a++) {
+            if (this.alarms[a].id == alarm.id)
+                this.alarms.splice(a, 1);
+        }
+        for (var _i = 0, _a = this.alarmList.items; _i < _a.length; _i++) {
+            var a_1 = _a[_i];
+            if (a_1.alarm.id == alarm.id)
+                a_1.show = false;
+        }
+    };
+    AlarmsComponent.prototype.add = function (alarm) {
+        console.log('add');
+        for (var _i = 0, _a = this.alarmList.items; _i < _a.length; _i++) {
+            var a = _a[_i];
+            if (a.alarm.id == alarm.id)
+                a.show = true;
+        }
+        console.log('alarm: ', alarm.id);
+        for (var a in this.allAlarms) {
+            console.log(this.allAlarms[a].id);
+            if (this.allAlarms[a].id == alarm.id) {
+                console.log('before:', this.alarms);
+                this.alarms.push(this.allAlarms[a]);
+                console.log('after:', this.alarms);
+            }
+        }
+    };
+    AlarmsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-alarms',
+            template: __webpack_require__("../../../../../src/app/alarms/alarms.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/alarms/alarms.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_3__login_auth_service__["a" /* AuthService */],
+            __WEBPACK_IMPORTED_MODULE_2__alarms_service__["a" /* AlarmsService */]])
+    ], AlarmsComponent);
+    return AlarmsComponent;
+}());
+
+>>>>>>> branch 'master' of https://github.com/nevenaDj/Bezbednost.git
 
 
 /***/ }),
@@ -367,6 +475,7 @@ var AlarmsComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+<<<<<<< HEAD
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -450,6 +559,91 @@ var AlarmsService = /** @class */ (function () {
     return AlarmsService;
 }());
 
+=======
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var AlarmsService = /** @class */ (function () {
+    function AlarmsService(http) {
+        this.http = http;
+        this.url = '/api/alarms';
+        this.headers = new __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["d" /* HttpHeaders */]({ 'Content-Type': 'application/json' });
+        this.RegenerateData = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["Subject"]();
+        this.RegenerateData$ = this.RegenerateData.asObservable();
+    }
+    AlarmsService.prototype.announceChange = function () {
+        this.RegenerateData.next();
+    };
+    AlarmsService.prototype.getAlarms = function () {
+        return this.http
+            .get(this.url, { 'headers': this.headers })
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    AlarmsService.prototype.getAlarm = function (id) {
+        var url = this.url + '/' + id;
+        return this.http
+            .get(url, { 'headers': this.headers })
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    AlarmsService.prototype.deleteAlarm = function (id) {
+        var url = this.url + '/' + id;
+        return this.http
+            .delete(url, { 'headers': this.headers })
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    AlarmsService.prototype.createAlarm = function (alarm) {
+        var url = this.url;
+        return this.http
+            .post(url, alarm, { 'headers': this.headers })
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    AlarmsService.prototype.getCount = function (start, end) {
+        this.url = '/api/alarms/count';
+        var time = { 'start': start, 'end': end };
+        return this.http
+            .post(this.url, time)
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    AlarmsService.prototype.getCountHostname = function (start, end) {
+        this.url = '/api/alarms/count/host';
+        var time = { 'start': start, 'end': end };
+        return this.http
+            .post(this.url, time)
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    AlarmsService.prototype.handleError = function (error) {
+        console.error("Error... ", error);
+        return Promise.reject(error.message || error);
+    };
+    AlarmsService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_common_http__["b" /* HttpClient */]])
+    ], AlarmsService);
+    return AlarmsService;
+}());
+
+>>>>>>> branch 'master' of https://github.com/nevenaDj/Bezbednost.git
 
 
 /***/ }),
@@ -804,11 +998,19 @@ var ChangePasswordComponent = /** @class */ (function () {
         };
     }
     ChangePasswordComponent.prototype.ngOnInit = function () {
+        var _this = this;
         if (localStorage.getItem('token') == null) {
             this.router.navigate(['login']);
         }
-        if (this.auth.isAdmin())
-            this.admin = true;
+        this.auth.me().
+            then(function (m) {
+            for (var _i = 0, _a = m.roles; _i < _a.length; _i++) {
+                var a = _a[_i];
+                if (a["name"] == 'ROLE_ADMIN') {
+                    _this.admin = true;
+                }
+            }
+        });
     };
     ChangePasswordComponent.prototype.save = function (model, isValid) {
         var _this = this;
@@ -1012,8 +1214,6 @@ var HomeComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jwt_decode__ = __webpack_require__("../../../../jwt-decode/lib/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jwt_decode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_jwt_decode__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1026,21 +1226,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var AuthService = /** @class */ (function () {
     function AuthService(http, router) {
         this.http = http;
         this.router = router;
     }
     AuthService.prototype.login = function (username, password) {
-        var _this = this;
         return this.http
             .post('/api/login', { username: username, password: password }, { responseType: 'text' })
             .toPromise()
             .then(function (res) {
             console.log('sucess login ');
             localStorage.setItem('token', res);
-            _this.setRoles();
         })
             .catch(this.handleError);
     };
@@ -1049,30 +1246,32 @@ var AuthService = /** @class */ (function () {
         this.router.navigate(['login']);
     };
     AuthService.prototype.redirect = function () {
+        var _this = this;
         if (localStorage.getItem('token') == null) {
             this.router.navigate(['login']);
         }
-        else if (this.isAdmin()) {
-            this.router.navigate(['home']);
-        }
-        else
-            this.router.navigate(['user/home']);
+        this.me().
+            then(function (m) {
+            for (var _i = 0, _a = m.roles; _i < _a.length; _i++) {
+                var a = _a[_i];
+                if (a["name"] == 'ROLE_ADMIN') {
+                    _this.router.navigate(['/home']);
+                }
+                if (a["name"] == 'ROLE_USER') {
+                    _this.router.navigate(['/user/home']);
+                }
+            }
+        });
     };
-    AuthService.prototype.isAdmin = function () {
+    /*
+        isAdmin(): boolean {
         return this.roles.includes('ROLE_ADMIN');
-    };
-    AuthService.prototype.isUser = function () {
+      }
+    
+      isUser(): boolean {
         return this.roles.includes('ROLE_USER');
-    };
-    AuthService.prototype.setRoles = function () {
-        var token = localStorage.getItem('token');
-        var tokenPayload = __WEBPACK_IMPORTED_MODULE_3_jwt_decode__(token);
-        this.roles = [];
-        for (var _i = 0, _a = tokenPayload.auth; _i < _a.length; _i++) {
-            var a = _a[_i];
-            this.roles.push(a['authority']);
-        }
-    };
+      }
+    */
     AuthService.prototype.me = function () {
         return this.http
             .get('/api/me')
@@ -1171,12 +1370,29 @@ var LoginComponent = /** @class */ (function () {
         localStorage.removeItem('token');
         this.auth.login(this.user.username, this.user.password)
             .then(function (res) {
-            if (_this.auth.isAdmin())
-                _this.router.navigate(['/home']);
-            else
-                _this.router.navigate(['/user/home']);
+            _this.auth.me().
+                then(function (m) {
+                for (var _i = 0, _a = m.roles; _i < _a.length; _i++) {
+                    var a = _a[_i];
+                    if (a["name"] == 'ROLE_ADMIN') {
+                        _this.router.navigate(['/home']);
+                    }
+                    if (a["name"] == 'ROLE_USER') {
+                        _this.router.navigate(['/user/home']);
+                    }
+                }
+            });
         })
-            .catch(function (res) { return _this.toastr.error('Invalid username/password.'); });
+            .catch(function (res) {
+            console.log(res.status);
+            console.log(res);
+            if (res == 'Http failure response for https://localhost:8443/api/login: 422 OK') {
+                _this.toastr.error('User is disabled.');
+            }
+            else {
+                _this.toastr.error('Invalid username/password.');
+            }
+        });
     };
     LoginComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -1230,6 +1446,7 @@ module.exports = "<div style=\"text-align:center\" class=\"logo\">\n  <br>\n<h1 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_do__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/do.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logs_service__ = __webpack_require__("../../../../../src/app/logs/logs.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
+<<<<<<< HEAD
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1307,6 +1524,77 @@ var LogsComponent = /** @class */ (function () {
     return LogsComponent;
 }());
 
+=======
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var LogsComponent = /** @class */ (function () {
+    function LogsComponent(logsService, auth) {
+        this.logsService = logsService;
+        this.auth = auth;
+        this.logs = [];
+        this.page = 0;
+        this.search_text = "";
+        this.search_mod = false;
+    }
+    LogsComponent.prototype.ngOnInit = function () {
+        this.getLogs();
+    };
+    LogsComponent.prototype.logout = function () {
+        this.auth.logout();
+    };
+    LogsComponent.prototype.onScroll = function () {
+        if (!this.search_mod) {
+            this.page = this.page + 1;
+            this.getLogs();
+        }
+    };
+    LogsComponent.prototype.getLogs = function () {
+        var _this = this;
+        this.logsService.getLogs(this.page).then(function (logs) {
+            for (var _i = 0, logs_1 = logs; _i < logs_1.length; _i++) {
+                var log = logs_1[_i];
+                _this.logs.push(log);
+            }
+        });
+    };
+    LogsComponent.prototype.onKeydown = function (event) {
+        var _this = this;
+        if (this.search_text == "") {
+            this.page = 0;
+            this.search_mod = false;
+            this.logs = [];
+            this.getLogs();
+        }
+        else {
+            this.page = 0;
+            console.log(this.search_text);
+            this.search_mod = true;
+            this.logsService.search(this.search_text).then(function (res) { return _this.logs = res; });
+        }
+    };
+    LogsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-logs',
+            template: __webpack_require__("../../../../../src/app/logs/logs.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/logs/logs.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__logs_service__["a" /* LogsService */], __WEBPACK_IMPORTED_MODULE_3__login_auth_service__["a" /* AuthService */]])
+    ], LogsComponent);
+    return LogsComponent;
+}());
+
+>>>>>>> branch 'master' of https://github.com/nevenaDj/Bezbednost.git
 
 
 /***/ }),
@@ -1319,6 +1607,7 @@ var LogsComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
+<<<<<<< HEAD
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1386,6 +1675,75 @@ var LogsService = /** @class */ (function () {
     return LogsService;
 }());
 
+=======
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var LogsService = /** @class */ (function () {
+    function LogsService(http) {
+        this.http = http;
+        this.url = '/api/logs';
+        this.RegenerateData = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__["a" /* Subject */]();
+        this.RegenerateData$ = this.RegenerateData.asObservable();
+    }
+    LogsService.prototype.announceChange = function () {
+        this.RegenerateData.next();
+    };
+    LogsService.prototype.getLogs = function (page, size) {
+        if (size === void 0) { size = 20; }
+        var httpParams = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["e" /* HttpParams */]().set('page', page.toString()).set('size', size.toString()).set('sort', 'id,desc');
+        return this.http
+            .get(this.url, { params: httpParams })
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    LogsService.prototype.search = function (text) {
+        return this.http
+            .post(this.url, text)
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    LogsService.prototype.getCount = function (start, end) {
+        this.url = '/api/logs/count';
+        var time = { 'start': start, 'end': end };
+        return this.http
+            .post(this.url, time)
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    LogsService.prototype.getCountHostname = function (start, end) {
+        this.url = '/api/logs/count/host';
+        var time = { 'start': start, 'end': end };
+        return this.http
+            .post(this.url, time)
+            .toPromise()
+            .then(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    LogsService.prototype.handleError = function (error) {
+        console.error("Error... ", error);
+        return Promise.reject(error.message || error);
+    };
+    LogsService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */]])
+    ], LogsService);
+    return LogsService;
+}());
+
+>>>>>>> branch 'master' of https://github.com/nevenaDj/Bezbednost.git
 
 
 /***/ }),
@@ -1424,6 +1782,7 @@ module.exports = "<div style=\"text-align:center\" class=\"logo\">\n  <br>\n<h1 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__alarms_alarms_service__ = __webpack_require__("../../../../../src/app/alarms/alarms.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
+<<<<<<< HEAD
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1508,6 +1867,87 @@ var NewAlarmComponent = /** @class */ (function () {
     return NewAlarmComponent;
 }());
 
+=======
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var NewAlarmComponent = /** @class */ (function () {
+    function NewAlarmComponent(alarmService, auth, router) {
+        this.alarmService = alarmService;
+        this.auth = auth;
+        this.router = router;
+        this.type = "hostname";
+        this.newAlarm = {
+            appname: '',
+            description: '',
+            hostname: '',
+            id: 0,
+            logs: [],
+            msg: '',
+            msgid: '',
+            name: '',
+            prival: 0,
+            procid: '',
+            sd: '',
+            timestamp: '',
+            version: 0,
+            number: 0,
+            seconds: 0,
+            canDelete: true
+        };
+    }
+    NewAlarmComponent.prototype.back = function () {
+        this.router.navigate(['/alarms']);
+    };
+    NewAlarmComponent.prototype.logout = function () {
+        this.auth.logout();
+    };
+    NewAlarmComponent.prototype.ngOnInit = function () {
+    };
+    NewAlarmComponent.prototype.newAlarmClick = function () {
+        var _this = this;
+        if (this.newAlarm.name == '') {
+            console.log("name");
+        }
+        else if (this.newAlarm.description == '') {
+            console.log("desc");
+        }
+        else if (this.newAlarm.number < 1) {
+            console.log("num");
+        }
+        else if (this.newAlarm.seconds < 1) {
+            console.log("sec");
+        }
+        else {
+            if (this.type == "hostname")
+                this.newAlarm.hostname = "!hostname!";
+            console.log("newAlarmClick");
+            console.log(this.newAlarm);
+            this.alarmService.createAlarm(this.newAlarm).then(function (res) { return _this.router.navigate(['/alarms', 'control']); }).catch(function (err) { return _this.router.navigate(['/alarms', 'control']); });
+        }
+    };
+    NewAlarmComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-new-alarm',
+            template: __webpack_require__("../../../../../src/app/new-alarm/new-alarm.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/new-alarm/new-alarm.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__alarms_alarms_service__["a" /* AlarmsService */], __WEBPACK_IMPORTED_MODULE_3__login_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]])
+    ], NewAlarmComponent);
+    return NewAlarmComponent;
+}());
+
+>>>>>>> branch 'master' of https://github.com/nevenaDj/Bezbednost.git
 
 
 /***/ }),
@@ -1546,6 +1986,7 @@ module.exports = "<div style=\"text-align:center\" class=\"logo\">\n    <br>\n  
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logs_logs_service__ = __webpack_require__("../../../../../src/app/logs/logs.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login_auth_service__ = __webpack_require__("../../../../../src/app/login/auth.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__alarms_alarms_service__ = __webpack_require__("../../../../../src/app/alarms/alarms.service.ts");
+<<<<<<< HEAD
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1636,6 +2077,93 @@ var ReportsComponent = /** @class */ (function () {
     return ReportsComponent;
 }());
 
+=======
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var ReportsComponent = /** @class */ (function () {
+    function ReportsComponent(logsService, auth, alarmService) {
+        this.logsService = logsService;
+        this.auth = auth;
+        this.alarmService = alarmService;
+        this.logs = [];
+        this.page = 0;
+        this.search_text = "";
+        this.search_mod = false;
+        this.date = new Date();
+        this.date2 = new Date();
+        this.alarmNum = 0;
+        this.logNum = 0;
+        this.alarmed = [];
+        this.loged = [];
+    }
+    ReportsComponent.prototype.ngOnInit = function () {
+        this.getLogs();
+    };
+    ReportsComponent.prototype.logout = function () {
+        this.auth.logout();
+    };
+    ReportsComponent.prototype.onScroll = function () {
+        if (!this.search_mod) {
+            this.page = this.page + 1;
+            this.getLogs();
+        }
+    };
+    ReportsComponent.prototype.getLogs = function () {
+        var _this = this;
+        this.logsService.getLogs(this.page).then(function (logs) {
+            for (var _i = 0, logs_1 = logs; _i < logs_1.length; _i++) {
+                var log = logs_1[_i];
+                _this.logs.push(log);
+            }
+        });
+    };
+    ReportsComponent.prototype.onKeydown = function (event) {
+        var _this = this;
+        if (this.search_text == "") {
+            this.page = 0;
+            this.search_mod = false;
+            this.logs = [];
+            this.getLogs();
+        }
+        else {
+            this.page = 0;
+            console.log(this.search_text);
+            this.search_mod = true;
+            this.logsService.search(this.search_text).then(function (res) { return _this.logs = res; });
+        }
+    };
+    ReportsComponent.prototype.search = function () {
+        var _this = this;
+        console.log('date: ', this.date, new Date(this.date));
+        console.log('date2: ', this.date2);
+        this.logsService.getCount(new Date(this.date), new Date(this.date2)).then(function (res) { return _this.logNum = res; });
+        this.logsService.getCountHostname(new Date(this.date), new Date(this.date2)).then(function (res) { _this.loged = res; console.log(res); });
+        this.alarmService.getCount(new Date(this.date), new Date(this.date2)).then(function (res) { return _this.alarmNum = res; });
+        this.alarmService.getCountHostname(new Date(this.date), new Date(this.date2)).then(function (res) { return _this.alarmed = res; });
+    };
+    ReportsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-reports',
+            template: __webpack_require__("../../../../../src/app/reports/reports.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/reports/reports.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__logs_logs_service__["a" /* LogsService */], __WEBPACK_IMPORTED_MODULE_2__login_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_3__alarms_alarms_service__["a" /* AlarmsService */]])
+    ], ReportsComponent);
+    return ReportsComponent;
+}());
+
+>>>>>>> branch 'master' of https://github.com/nevenaDj/Bezbednost.git
 
 
 /***/ }),

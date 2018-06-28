@@ -3,6 +3,7 @@ package com.example.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.security.jwt.JwtTokenFilterConfigurer;
 import com.example.security.jwt.JwtTokenProvider;
@@ -46,9 +48,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// No session will be created or used by spring security
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		http.authorizeRequests()
-			.antMatchers("/", "/login", "/api/login").permitAll()
-			.anyRequest().authenticated();
+		http.authorizeRequests().antMatchers("/", "/login", "/api/login").permitAll()
+		.antMatchers(HttpMethod.GET)
+				.hasAuthority("READ_PRIVILEGE")
+				.antMatchers("/api/alarms").hasAuthority("WRITE_PRIVILEGE").anyRequest().authenticated();
 
 		// If a user try to access a resource without having enough permissions
 		http.exceptionHandling().accessDeniedPage("/api/login");
