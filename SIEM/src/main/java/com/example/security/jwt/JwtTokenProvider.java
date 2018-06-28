@@ -16,11 +16,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.example.exception.CustomException;
+import com.example.model.Privilege;
 import com.example.model.Role;
 import com.example.security.MyUserDetails;
 
@@ -44,16 +46,15 @@ public class JwtTokenProvider {
 	@PostConstruct
 	protected void init() {
 		KeyStoreReader kr = new KeyStoreReader();
-		Certificate c = kr.readCertificate("src\\main\\resources\\cert-chain.p12", "secretpassword", "1");
+		Certificate c = kr.readCertificate("/Users/nomisabi/git/Bezbednost_nevena/SIEM/src/main/resources/cert-chain.p12", "secretpassword", "1");
 		publicKey = c.getPublicKey();
-		privateKey = kr.readPrivateKey("src\\main\\resources\\cert-chain.p12", "secretpassword", "1", "secretpassword");
+		privateKey = kr.readPrivateKey("/Users/nomisabi/git/Bezbednost_nevena/SIEM/src/main/resources/cert-chain.p12", "secretpassword", "1", "secretpassword");
 	}
 
-	public String createToken(String username, List<Role> roles) {
+	public String createToken(String username, Collection<Role> roles) {
 
 		Claims claims = Jwts.claims().setSubject(username);
-		claims.put("auth", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority()))
-				.filter(Objects::nonNull).collect(Collectors.toList()));
+		claims.put("auth", getAuthorities(roles));
 
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + validityInMilliseconds);

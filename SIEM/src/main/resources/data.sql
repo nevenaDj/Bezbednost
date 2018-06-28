@@ -4,8 +4,18 @@ insert into user (username, password, email, enabled) values ('admin', '$2a$12$S
 -- password is 'user' (bcrypt encoded)
 insert into user (username, password, email, enabled) values ('user', '$2a$04$Amda.Gm4Q.ZbXz9wcohDHOhOBaNQAkSS1QO26Eh8Hovu3uzEpQvcq', 'user@user.com', false);
 
-insert into user_roles (user_id, roles) values (1, 0); -- admin has ROLE_ADMIN
-insert into user_roles (user_id, roles) values (2, 1); -- user has ROLE_USER
+insert into privilege (name) value ('READ_PRIVILEGE');
+insert into privilege (name) value ('WRITE_PRIVILEGE');
+
+insert into role (name) value ('ROLE_ADMIN');
+insert into role (name) value ('ROLE_USER');
+
+insert into roles_privileges (role_id, privilege_id) values (1,1);
+insert into roles_privileges (role_id, privilege_id) values (1,2);
+insert into roles_privileges (role_id, privilege_id) values (2,1);
+
+insert into users_roles (user_id, role_id) values (1, 1); -- admin has ROLE_ADMIN
+insert into users_roles (user_id, role_id) values (2, 2); -- user has ROLE_USER
 
 insert into alarm (id, name, description, seconds,number, prival, version, timestamp, hostname, appname , procid, msgid, sd, msg, can_delete) 
 values (1000,'status40..', 'status 40..', 60, 3, 0, 0, '','!hostname!','Server','','','status=\"40', '', false); 

@@ -39,7 +39,7 @@ public class TcpServer implements Server, Connection.Listener {
 				port = 1234;
 			}
 			KeyStore keyStore = KeyStore.getInstance("JKS");
-			keyStore.load(new FileInputStream("src\\main\\resources\\siem-center.p12"), "secretpassword".toCharArray());
+			keyStore.load(new FileInputStream("/Users/nomisabi/git/Bezbednost_nevena/SIEM/src/main/resources/siem-center.p12"), "secretpassword".toCharArray());
 
 			KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
 			keyManagerFactory.init(keyStore, "secretpassword".toCharArray());
