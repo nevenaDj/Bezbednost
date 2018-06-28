@@ -24,6 +24,9 @@ export class ReportsComponent implements OnInit {
   logNum=0;
   alarmed:ReportInterface[]=[];
   loged:ReportInterface[]=[];
+  dateStert:Date;
+  dateEnd:Date;
+
 
   constructor(private logsService: LogsService, private auth: AuthService,private alarmService:AlarmsService
   ) { 
@@ -32,7 +35,6 @@ export class ReportsComponent implements OnInit {
   
 
   ngOnInit() {
-    this.getLogs()
   }
 
   logout(){
@@ -74,10 +76,15 @@ export class ReportsComponent implements OnInit {
   }
 
   search(){
+    this.dateStert= new Date();
     console.log('date: ', this.date, new Date(this.date))
     console.log('date2: ', this.date2)
     this.logsService.getCount(new Date(this.date), new Date(this.date2)).then(res=>this.logNum=res);
-    this.logsService.getCountHostname(new Date(this.date), new Date(this.date2)).then(res=>{this.loged=res; console.log(res)});
+    this.logsService.getCountHostname(new Date(this.date), new Date(this.date2)).then(res=>{this.loged=res;
+       console.log(res)
+       this.dateEnd=new Date();
+       console.log('date1: ', this.dateStert.getMilliseconds()- this.dateEnd.getMilliseconds());
+      });
     this.alarmService.getCount(new Date(this.date), new Date(this.date2)).then(res=>this.alarmNum=res);
     this.alarmService.getCountHostname(new Date(this.date), new Date(this.date2)).then(res=>this.alarmed=res);
   }

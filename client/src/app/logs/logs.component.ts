@@ -19,6 +19,8 @@ export class LogsComponent implements OnInit {
 
   search_text:string="";
   search_mod:boolean=false;
+  dateStert:Date;
+  dateEnd:Date;
 
 
   constructor(private logsService: LogsService, private auth: AuthService
@@ -26,6 +28,7 @@ export class LogsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dateStert=new Date()
     this.getLogs()
   }
 
@@ -46,6 +49,8 @@ export class LogsComponent implements OnInit {
         for (let log of logs) {
           this.logs.push(log)
         }
+        this.dateEnd=new Date();
+        console.log('date1: ', this.dateStert.getMilliseconds()- this.dateEnd.getMilliseconds());
       }
     )
   }
@@ -57,11 +62,15 @@ export class LogsComponent implements OnInit {
         this.logs=[]
         this.getLogs()
       } else{
+        this.dateStert=new Date()
         this.page=0
         console.log(this.search_text);
         this.search_mod=true;
         this.logsService.search(this.search_text).then(
-          res=> this.logs=res
+          res=> {this.logs=res.slice(0, 100);
+            
+            this.dateEnd=new Date();
+            console.log('date1: ', this.dateStert.getMilliseconds()- this.dateEnd.getMilliseconds());}
         )
       }
 

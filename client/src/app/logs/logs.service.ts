@@ -38,11 +38,11 @@ export class LogsService {
     .catch(this.handleError);
   }
 
-  getCount(start:Date, end:Date):Promise<any>{
-    this.url='/api/logs/count';
+  getCount(start:Date, end:Date):Promise<number>{
+    let url='/api/logs/count';
     let time= {'start':start, 'end':end};
     return this.http
-    .post<any>(this.url, time)
+    .put<number>(url, time)
     .toPromise()
     .then(res => res)
     .catch(this.handleError);
@@ -50,10 +50,10 @@ export class LogsService {
 
 
   getCountHostname(start:Date, end:Date):Promise<ReportInterface[]>{
-    this.url='/api/logs/count/host';
+    let url='/api/logs/count/host';
     let time= {'start':start, 'end':end};
     return this.http
-    .post<ReportInterface[]>(this.url, time)
+    .put<ReportInterface[]>(url, time)
     .toPromise()
     .then(res => res)
     .catch(this.handleError);

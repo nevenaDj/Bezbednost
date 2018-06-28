@@ -43,6 +43,7 @@ public class LogService {
 			System.out.println("juhe");
 		}
 		for (Alarm alarm : alarms) {
+			String alarmHostname=alarm.getHostname();
 			if (alarm.getHostname().equals("!hostname!"))
 				alarm.setHostname(log.getHostname());
 			if (conditions(alarm, log)) {
@@ -65,6 +66,7 @@ public class LogService {
 						}
 					}
 				}
+				alarm.setHostname(alarmHostname);
 				isAlarmed(alarm, log, logsCond);
 			}
 		}

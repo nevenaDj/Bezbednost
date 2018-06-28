@@ -57,11 +57,11 @@ export class AlarmsService {
     .catch(this.handleError);
   }
 
-  getCount(start:Date, end:Date):Promise<any>{
-    this.url='/api/alarms/count';
+  getCount(start:Date, end:Date):Promise<number>{
+    let url='/api/alarms/count';
     let time= {'start':start, 'end':end};
     return this.http
-    .post<any>(this.url, time)
+    .put<number>(url, time)
     .toPromise()
     .then(res => res)
     .catch(this.handleError);
@@ -69,10 +69,10 @@ export class AlarmsService {
 
 
   getCountHostname(start:Date, end:Date):Promise<ReportInterface[]>{
-    this.url='/api/alarms/count/host';
+    let url='/api/alarms/count/host';
     let time= {'start':start, 'end':end};
     return this.http
-    .post<ReportInterface[]>(this.url, time)
+    .put<ReportInterface[]>(url, time)
     .toPromise()
     .then(res => res)
     .catch(this.handleError);

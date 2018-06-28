@@ -17,6 +17,8 @@ export class AlarmsComponent implements OnInit {
   allAlarms: AlarmInterface[];
   alarmList: Dict;
   show:boolean=false;
+  dateStert:Date;
+  dateEnd:Date;
 
     constructor(private router: Router,
       private auth: AuthService,
@@ -27,6 +29,7 @@ export class AlarmsComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.dateStert=new Date();
     this.getAlarms();
   }
 
@@ -44,7 +47,9 @@ export class AlarmsComponent implements OnInit {
           let item:Item={alarm:alar, show:true};
           this.alarmList.items.push(item);
           
-        }console.log(this.alarmList.items);
+        }
+        this.dateEnd=new Date();
+        console.log('date1: ', this.dateStert.getMilliseconds()- this.dateEnd.getMilliseconds());
         
       }
     )

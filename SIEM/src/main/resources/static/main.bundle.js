@@ -279,6 +279,7 @@ var AlarmsComponent = /** @class */ (function () {
         this.alarmList = { items: [] };
     }
     AlarmsComponent.prototype.ngOnInit = function () {
+        this.dateStert = new Date();
         this.getAlarms();
     };
     AlarmsComponent.prototype.logout = function () {
@@ -297,7 +298,8 @@ var AlarmsComponent = /** @class */ (function () {
                 var item = { alarm: alar, show: true };
                 _this.alarmList.items.push(item);
             }
-            console.log(_this.alarmList.items);
+            _this.dateEnd = new Date();
+            console.log('date1: ', _this.dateStert.getMilliseconds() - _this.dateEnd.getMilliseconds());
         });
     };
     AlarmsComponent.prototype.showAlarm = function (id) {
@@ -420,19 +422,19 @@ var AlarmsService = /** @class */ (function () {
             .catch(this.handleError);
     };
     AlarmsService.prototype.getCount = function (start, end) {
-        this.url = '/api/alarms/count';
+        var url = '/api/alarms/count';
         var time = { 'start': start, 'end': end };
         return this.http
-            .post(this.url, time)
+            .put(url, time)
             .toPromise()
             .then(function (res) { return res; })
             .catch(this.handleError);
     };
     AlarmsService.prototype.getCountHostname = function (start, end) {
-        this.url = '/api/alarms/count/host';
+        var url = '/api/alarms/count/host';
         var time = { 'start': start, 'end': end };
         return this.http
-            .post(this.url, time)
+            .put(url, time)
             .toPromise()
             .then(function (res) { return res; })
             .catch(this.handleError);
@@ -1251,6 +1253,7 @@ var LogsComponent = /** @class */ (function () {
         this.search_mod = false;
     }
     LogsComponent.prototype.ngOnInit = function () {
+        this.dateStert = new Date();
         this.getLogs();
     };
     LogsComponent.prototype.logout = function () {
@@ -1269,6 +1272,8 @@ var LogsComponent = /** @class */ (function () {
                 var log = logs_1[_i];
                 _this.logs.push(log);
             }
+            _this.dateEnd = new Date();
+            console.log('date1: ', _this.dateStert.getMilliseconds() - _this.dateEnd.getMilliseconds());
         });
     };
     LogsComponent.prototype.onKeydown = function (event) {
@@ -1280,10 +1285,15 @@ var LogsComponent = /** @class */ (function () {
             this.getLogs();
         }
         else {
+            this.dateStert = new Date();
             this.page = 0;
             console.log(this.search_text);
             this.search_mod = true;
-            this.logsService.search(this.search_text).then(function (res) { return _this.logs = res; });
+            this.logsService.search(this.search_text).then(function (res) {
+                _this.logs = res.slice(0, 100);
+                _this.dateEnd = new Date();
+                console.log('date1: ', _this.dateStert.getMilliseconds() - _this.dateEnd.getMilliseconds());
+            });
         }
     };
     LogsComponent = __decorate([
@@ -1348,19 +1358,19 @@ var LogsService = /** @class */ (function () {
             .catch(this.handleError);
     };
     LogsService.prototype.getCount = function (start, end) {
-        this.url = '/api/logs/count';
+        var url = '/api/logs/count';
         var time = { 'start': start, 'end': end };
         return this.http
-            .post(this.url, time)
+            .put(url, time)
             .toPromise()
             .then(function (res) { return res; })
             .catch(this.handleError);
     };
     LogsService.prototype.getCountHostname = function (start, end) {
-        this.url = '/api/logs/count/host';
+        var url = '/api/logs/count/host';
         var time = { 'start': start, 'end': end };
         return this.http
-            .post(this.url, time)
+            .put(url, time)
             .toPromise()
             .then(function (res) { return res; })
             .catch(this.handleError);
@@ -1475,11 +1485,16 @@ var NewAlarmComponent = /** @class */ (function () {
             console.log("sec");
         }
         else {
+            this.dateStart = new Date();
             if (this.type == "hostname")
                 this.newAlarm.hostname = "!hostname!";
             console.log("newAlarmClick");
             console.log(this.newAlarm);
-            this.alarmService.createAlarm(this.newAlarm).then(function (res) { return _this.router.navigate(['/alarms', 'control']); }).catch(function (err) { return _this.router.navigate(['/alarms', 'control']); });
+            this.alarmService.createAlarm(this.newAlarm).then(function (res) {
+                _this.router.navigate(['/alarms', 'control']);
+                _this.dateEnd = new Date();
+                console.log('date1: ', _this.dateStart.getMilliseconds() - _this.dateEnd.getMilliseconds());
+            }).catch(function (err) { return _this.router.navigate(['/alarms', 'control']); });
         }
     };
     NewAlarmComponent = __decorate([
@@ -1561,7 +1576,6 @@ var ReportsComponent = /** @class */ (function () {
         this.loged = [];
     }
     ReportsComponent.prototype.ngOnInit = function () {
-        this.getLogs();
     };
     ReportsComponent.prototype.logout = function () {
         this.auth.logout();
@@ -1598,10 +1612,16 @@ var ReportsComponent = /** @class */ (function () {
     };
     ReportsComponent.prototype.search = function () {
         var _this = this;
+        this.dateStert = new Date();
         console.log('date: ', this.date, new Date(this.date));
         console.log('date2: ', this.date2);
         this.logsService.getCount(new Date(this.date), new Date(this.date2)).then(function (res) { return _this.logNum = res; });
-        this.logsService.getCountHostname(new Date(this.date), new Date(this.date2)).then(function (res) { _this.loged = res; console.log(res); });
+        this.logsService.getCountHostname(new Date(this.date), new Date(this.date2)).then(function (res) {
+            _this.loged = res;
+            console.log(res);
+            _this.dateEnd = new Date();
+            console.log('date1: ', _this.dateStert.getMilliseconds() - _this.dateEnd.getMilliseconds());
+        });
         this.alarmService.getCount(new Date(this.date), new Date(this.date2)).then(function (res) { return _this.alarmNum = res; });
         this.alarmService.getCountHostname(new Date(this.date), new Date(this.date2)).then(function (res) { return _this.alarmed = res; });
     };

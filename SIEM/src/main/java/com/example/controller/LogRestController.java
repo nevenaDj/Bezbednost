@@ -99,7 +99,7 @@ public class LogRestController {
 	}
 	
 
-	@RequestMapping(value = "/api/logs/count", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/logs/count", method = RequestMethod.PUT)
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<Integer> getLogsCount(@RequestBody TimeDTO time) throws ParseException {
 		int x= logService.count(time.getStart(), time.getEnd());
@@ -107,19 +107,19 @@ public class LogRestController {
 	}
 	
 
-	@RequestMapping(value = "/api/logs/count/host", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/logs/count/host", method = RequestMethod.PUT)
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<List<ReportDTO>> getLogsCountHost(@RequestBody TimeDTO time) throws ParseException {
 		Map<String,Integer> x= logService.countByHostname(time.getStart(), time.getEnd());
 		List<ReportDTO> ret = new ArrayList<>();
 		for (String key : x.keySet()) {
 			ReportDTO r= new ReportDTO(key, x.get(key));
-			ret.add(r);
+				ret.add(r);
 		}
 		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/api/alarms/count", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/alarms/count", method = RequestMethod.PUT)
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<Integer> getAlarmsCount(@RequestBody TimeDTO time) throws ParseException {
 		int x= alarmService.count(time.getStart(), time.getEnd());
@@ -127,7 +127,7 @@ public class LogRestController {
 	}
 	
 
-	@RequestMapping(value = "/api/alarms/count/host", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/alarms/count/host", method = RequestMethod.PUT)
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ResponseEntity<List<ReportDTO>> getAlarmsCountHost(@RequestBody TimeDTO time) throws ParseException {
 		Map<String,Integer> x= alarmService.countByHostname(time.getStart(), time.getEnd());

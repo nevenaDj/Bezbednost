@@ -103,6 +103,7 @@ public class AlarmService {
 			}
 		}
 		Set<Log> logAlarm = new HashSet<>();
+		String alarmHostname=alarm.getHostname();
 		for (String host : hostname.keySet()) {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			Map<Log, Date> date = new HashMap<>();
@@ -156,6 +157,7 @@ public class AlarmService {
 			}
 		}
 		alarm.setLogs(logAlarm);
+		alarm.setHostname(alarmHostname);
 		alarmRepository.save(alarm);
 		
 		

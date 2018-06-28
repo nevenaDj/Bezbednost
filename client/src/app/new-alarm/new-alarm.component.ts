@@ -12,6 +12,8 @@ import { AuthService } from '../login/auth.service';
 export class NewAlarmComponent implements OnInit {
 
   type="hostname";
+  dateStart:Date;
+  dateEnd:Date;
 
   newAlarm: AlarmInterface;
   constructor(private alarmService: AlarmsService, private auth: AuthService, private router: Router) { 
@@ -56,12 +58,15 @@ export class NewAlarmComponent implements OnInit {
     } else if(this.newAlarm.seconds<1){
       console.log("sec");
     }else{
+      this.dateStart=new Date();
       if (this.type=="hostname")
         this.newAlarm.hostname="!hostname!"
       console.log("newAlarmClick");
       console.log(this.newAlarm);
       this.alarmService.createAlarm(this.newAlarm).then(
-          res=>this.router.navigate(['/alarms','control'])
+          res=>{this.router.navigate(['/alarms','control'])
+          this.dateEnd= new Date();
+          console.log('date1: ', this.dateStart.getMilliseconds()- this.dateEnd.getMilliseconds());}
       ).catch(err=>this.router.navigate(['/alarms','control']))
     }
   }
